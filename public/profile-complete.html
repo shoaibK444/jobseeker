@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Complete Your Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-email {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 8px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-header p {
+            color: #666;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .photo-upload {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .photo-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            font-size: 40px;
+            color: #ccc;
+        }
+
+        .upload-btn {
+            padding: 10px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .upload-btn:hover {
+            background: #5a6fd6;
+        }
+
+        .id-card-upload {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+        }
+
+        .id-card-preview {
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            background: #f0f0f0;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .id-card-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .id-placeholder {
+            font-size: 40px;
+            color: #ccc;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .required-badge {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">📋 Job Portal</div>
+        <div class="user-info">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-email" id="userEmail">user@email.com</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h1>Complete Your Profile</h1>
+                <p>Please fill in all required information to complete your profile</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h3>Personal Information</h3>
+
+                    <div class="photo-upload">
+                        <div class="photo-preview" id="photoPreview">
+                            <span class="photo-placeholder">📷</span>
+                        </div>
+                        <input type="file" id="profilePhoto" accept="image/*" onchange="previewPhoto(event)" style="display: none;">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('profilePhoto').click()">Upload Photo</button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name <span class="required-badge">Required</span></label>
+                            <input type="text" id="fullName" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth <span class="required-badge">Required</span></label>
+                            <input type="date" id="dob" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number <span class="required-badge">Required</span></label>
+                            <input type="tel" id="phone" required placeholder="Enter your phone number">
+                        </div>
+                        <div class="form-group">
+                            <label>CNIC Number <span class="required-badge">Required</span></label>
+                            <input type="text" id="cnic" required placeholder="XXXXX-XXXXXXX-X">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address <span class="required-badge">Required</span></label>
+                        <textarea id="address" required rows="3" placeholder="Enter your full address"></textarea>
+                    </div>
+                </div>
+
+                <!-- ID Card -->
+                <div class="form-section">
+                    <h3>ID Card Upload</h3>
+
+                    <div class="id-card-upload">
+                        <div class="id-card-preview" id="idCardPreview">
+                            <span class="id-placeholder">🪪</span>
+                        </div>
+                        <input type="file" id="idCardPhoto" accept="image/*" onchange="previewIdCard(event)" style="display: none;">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('idCardPhoto').click()">Upload ID Card</button>
+                        <p style="margin-top: 10px; color: #666; font-size: 14px;">Upload your CNIC or Passport</p>
+                    </div>
+                </div>
+
+                <!-- Professional Information -->
+                <div class="form-section">
+                    <h3>Professional Information</h3>
+
+                    <div class="form-group">
+                        <label>Desired Job Title <span class="required-badge">Required</span></label>
+                        <input type="text" id="jobTitle" required placeholder="e.g., Software Engineer">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Skills (comma separated) <span class="required-badge">Required</span></label>
+                        <input type="text" id="skills" required placeholder="e.g., JavaScript, React, Node.js">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Experience <span class="required-badge">Required</span></label>
+                        <select id="experience" required>
+                            <option value="">Select experience level</option>
+                            <option value="fresher">Fresh Graduate</option>
+                            <option value="1-2">1-2 years</option>
+                            <option value="3-5">3-5 years</option>
+                            <option value="5-10">5-10 years</option>
+                            <option value="10+">10+ years</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Education Level <span class="required-badge">Required</span></label>
+                        <select id="education" required>
+                            <option value="">Select education level</option>
+                            <option value="high-school">High School</option>
+                            <option value="bachelors">Bachelor's Degree</option>
+                            <option value="masters">Master's Degree</option>
+                            <option value="phd">PhD</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bio / About Yourself</label>
+                        <textarea id="bio" rows="4" placeholder="Tell us about yourself..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">Complete Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '';
+        let currentUser = null;
+        let profilePhotoData = null;
+        let idCardPhotoData = null;
+
+        // Check authentication
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Get current user
+        async function getCurrentUser() {
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    currentUser = await response.json();
+                    updateUserInfo();
+                } else {
+                    logout();
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        }
+
+        function updateUserInfo() {
+            if (currentUser) {
+                const initial = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U';
+                document.getElementById('userAvatar').textContent = initial;
+                document.getElementById('userEmail').textContent = currentUser.email;
+
+                // Pre-fill form if profile exists
+                if (currentUser.profile) {
+                    document.getElementById('fullName').value = currentUser.profile.name || '';
+                    document.getElementById('dob').value = currentUser.profile.dob || '';
+                    document.getElementById('phone').value = currentUser.profile.phone || '';
+                    document.getElementById('cnic').value = currentUser.profile.cnic || '';
+                    document.getElementById('address').value = currentUser.profile.address || '';
+                    document.getElementById('jobTitle').value = currentUser.profile.desiredJobTitle || '';
+                    document.getElementById('skills').value = currentUser.profile.skills ? currentUser.profile.skills.join(', ') : '';
+                    document.getElementById('experience').value = currentUser.profile.experience || '';
+                    document.getElementById('education').value = currentUser.profile.education || '';
+                    document.getElementById('bio').value = currentUser.profile.bio || '';
+
+                    if (currentUser.profile.photo) {
+                        profilePhotoData = currentUser.profile.photo;
+                        document.getElementById('photoPreview').innerHTML = `<img src="${currentUser.profile.photo}" alt="Profile Photo">`;
+                    }
+                    if (currentUser.profile.idCard) {
+                        idCardPhotoData = currentUser.profile.idCard;
+                        document.getElementById('idCardPreview').innerHTML = `<img src="${currentUser.profile.idCard}" alt="ID Card">`;
+                    }
+
+                    updateProgress();
+                }
+            }
+        }
+
+        function previewPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePhotoData = e.target.result;
+                    document.getElementById('photoPreview').innerHTML = `<img src="${profilePhotoData}" alt="Profile Photo">`;
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewIdCard(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    idCardPhotoData = e.target.result;
+                    document.getElementById('idCardPreview').innerHTML = `<img src="${idCardPhotoData}" alt="ID Card">`;
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateProgress() {
+            let filled = 0;
+            const total = 10;
+
+            if (document.getElementById('fullName').value) filled++;
+            if (document.getElementById('dob').value) filled++;
+            if (document.getElementById('phone').value) filled++;
+            if (document.getElementById('cnic').value) filled++;
+            if (document.getElementById('address').value) filled++;
+            if (profilePhotoData) filled++;
+            if (idCardPhotoData) filled++;
+            if (document.getElementById('jobTitle').value) filled++;
+            if (document.getElementById('skills').value) filled++;
+            if (document.getElementById('experience').value) filled++;
+            if (document.getElementById('education').value) filled++;
+
+            const percentage = (filled / total) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        // Add progress update on input
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', updateProgress);
+            input.addEventListener('change', updateProgress);
+        });
+
+        async function saveProfile(event) {
+            event.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+
+            const profileData = {
+                name: document.getElementById('fullName').value,
+                dob: document.getElementById('dob').value,
+                phone: document.getElementById('phone').value,
+                cnic: document.getElementById('cnic').value,
+                address: document.getElementById('address').value,
+                photo: profilePhotoData,
+                idCard: idCardPhotoData,
+                desiredJobTitle: document.getElementById('jobTitle').value,
+                skills: document.getElementById('skills').value.split(',').map(s => s.trim()),
+                experience: document.getElementById('experience').value,
+                education: document.getElementById('education').value,
+                bio: document.getElementById('bio').value,
+                profileComplete: true,
+                profileScore: calculateProfileScore()
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Profile completed successfully!');
+
+                    // Update local storage
+                    currentUser.profile = data.profile;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert(data.error || 'Error saving profile');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Complete Profile';
+                }
+            } catch (error) {
+                alert('Error saving profile: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Complete Profile';
+            }
+        }
+
+        function calculateProfileScore() {
+            let score = 0;
+            const fields = [
+                'fullName', 'dob', 'phone', 'cnic', 'address',
+                'jobTitle', 'skills', 'experience', 'education'
+            ];
+
+            fields.forEach(field => {
+                if (document.getElementById(field).value) score += 10;
+            });
+
+            if (profilePhotoData) score += 10;
+            if (idCardPhotoData) score += 10;
+            if (document.getElementById('bio').value) score += 10;
+
+            return Math.min(score, 100);
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('verificationEmail');
+            window.location.href = 'login.html';
+        }
+
+        // Initialize
+        getCurrentUser();
+    </script>
+</body>
+</html>

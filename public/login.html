@@ -406,9 +406,11 @@
                     }
 
                     alert('Login successful! Welcome back!');
-                    
-                    // Redirect admin to admin dashboard
-                    if (data.user.role === 'admin') {
+
+                    // Redirect based on profile completion
+                    if (data.user.profileComplete === false) {
+                        window.location.href = 'profile-complete.html';
+                    } else if (data.user.role === 'admin') {
                         window.location.href = 'admin-dashboard.html';
                     } else {
                         window.location.href = 'dashboard.html';

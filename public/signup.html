@@ -517,22 +517,17 @@
           const data = await response.json();
 
           if (response.ok) {
-            if (data.requiresVerification) {
-              // Store email for verification
-              localStorage.setItem('verificationEmail', email);
-              alert('Account created! We sent a 4-digit verification code to your email. Please check and enter it below.');
-              window.location.href = `verify-email.html?email=${encodeURIComponent(email)}`;
+            localStorage.setItem("authToken", data.token);
+            localStorage.setItem("currentUser", JSON.stringify(data.user));
+            alert("Account created successfully! Welcome to Job Portal!");
+            
+            // Redirect based on profile completion
+            if (data.user.profileComplete === false) {
+              window.location.href = "profile-complete.html";
+            } else if (data.user.role === 'admin') {
+              window.location.href = "admin-dashboard.html";
             } else {
-              localStorage.setItem("authToken", data.token);
-              localStorage.setItem("currentUser", JSON.stringify(data.user));
-              alert("Account created successfully! Welcome to Job Portal!");
-              
-              // Redirect admin to admin dashboard
-              if (data.user.role === 'admin') {
-                window.location.href = "admin-dashboard.html";
-              } else {
-                window.location.href = "dashboard.html";
-              }
+              window.location.href = "dashboard.html";
             }
           } else {
             alert(data.error || "Error creating account");

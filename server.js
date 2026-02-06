@@ -10,7 +10,7 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0'; // Listen on all interfaces
-const CLIENT_URL = process.env.CLIENT_URL || 'https://jobseeker.edu.pk';
+const CLIENT_URL = process.env.CLIENT_URL || 'https://jobseeker-pk-edu.up.railway.app';
 const JWT_SECRET = 'job-portal-secret-key-2024';
 const RESET_TOKEN_SECRET = 'reset-token-secret-key-2024';
 
@@ -393,25 +393,20 @@ app.post('/api/auth/signup', async (req, res) => {
             name,
             createdAt: new Date().toISOString(),
             profile: null,
-            isVerified: false,
+            isVerified: true,
             isActive: true,
-            status: 'pending'
+            status: 'active'
         };
         
         db.users.push(user);
         
-        // Generate verification code
-        const verificationCode = generateVerificationCode();
-        storeVerificationCode(email, verificationCode);
-        
-        // Send verification email (simulated)
-        const verificationEmail = emailTemplates.emailVerification(verificationCode);
-        sendEmail(email, verificationEmail.subject, verificationEmail.body);
+        // Generate token
+        const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
         
         res.status(201).json({
-            message: 'Account created successfully. Please verify your email with the code sent to your email address.',
-            requiresVerification: true,
-            email: email
+            message: 'Account created successfully',
+            token,
+            user: { id: user.id, email: user.email, role: user.role, name: user.name, profileComplete: false }
         });
     } catch (error) {
         res.status(500).json({ error: 'Error creating user: ' + error.message });

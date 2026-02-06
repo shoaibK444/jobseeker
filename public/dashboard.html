@@ -56,11 +56,61 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            color: white;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 25px;
         }
 
-        .user-info span {
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-email {
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+
+        .logout-btn {
+            padding: 8px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
             font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+            transform: scale(1.05);
         }
 
         /* Main Container */
@@ -503,8 +553,14 @@
     <nav class="navbar">
         <a href="#" class="navbar-brand" onclick="showPage('dashboard')">Job Portal</a>
         <div class="user-info" id="userInfo">
-            <span id="userName"></span>
-            <button class="btn btn-secondary btn-small" onclick="logout()">Logout</button>
+            <div class="user-avatar" id="userAvatar">
+                <span id="userInitial">U</span>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">User Name</span>
+                <span class="user-email" id="userEmail">user@email.com</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </nav>
 
@@ -783,7 +839,17 @@
                 document.getElementById('welcomeTitle').textContent = `Welcome, ${currentUser.name}!`;
                 document.getElementById('welcomeMessage').textContent = 'Manage your jobs and find candidates';
             }
-            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userName').textContent = currentUser.name || 'User';
+            document.getElementById('userEmail').textContent = currentUser.email || '';
+            
+            // Set user initial or photo
+            const userAvatar = document.getElementById('userAvatar');
+            const userInitial = document.getElementById('userInitial');
+            if (currentUser.profile && currentUser.profile.photo) {
+                userAvatar.innerHTML = `<img src="${currentUser.profile.photo}" alt="Profile Photo">`;
+            } else {
+                userInitial.textContent = (currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U');
+            }
         });
 
         // Toast Notifications
