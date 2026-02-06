@@ -10,7 +10,7 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0'; // Listen on all interfaces
-const CLIENT_URL = process.env.CLIENT_URL || 'https://jobseeker.up.railway.app';
+const CLIENT_URL = process.env.CLIENT_URL || 'https://jobseeker.edu.pk';
 const JWT_SECRET = 'job-portal-secret-key-2024';
 const RESET_TOKEN_SECRET = 'reset-token-secret-key-2024';
 
@@ -33,9 +33,9 @@ function generateVerificationCode() {
     return Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit code
 }
 
-// Store verification code with expiration (10 minutes)
+// Store verification code with expiration (5 minutes)
 function storeVerificationCode(email, code) {
-    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+    const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
     emailVerificationCodes.set(email, { code, expiresAt });
     return expiresAt;
 }
@@ -484,7 +484,7 @@ app.post('/api/auth/resend-verification', async (req, res) => {
         
         res.json({
             message: 'A new verification code has been sent to your email',
-            expiresIn: '10 minutes'
+            expiresIn: '5 minutes'
         });
     } catch (error) {
         res.status(500).json({ error: 'Error resending verification code: ' + error.message });

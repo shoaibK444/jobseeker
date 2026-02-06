@@ -186,21 +186,28 @@
             border: 1px solid #c3e6cb;
         }
 
-        .resend-link {
+        .resend-section {
             text-align: center;
             margin-top: 20px;
             font-size: 14px;
             color: #666;
         }
 
-        .resend-link a {
+        .resend-section a {
             color: #667eea;
             cursor: pointer;
             text-decoration: none;
+            font-weight: 600;
         }
 
-        .resend-link a:hover {
+        .resend-section a:hover {
             text-decoration: underline;
+        }
+
+        .resend-section a.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
         .timer {
@@ -236,9 +243,9 @@
             <button type="submit" class="btn btn-primary" id="submitBtn">Verify Email</button>
         </form>
 
-        <div class="resend-link">
-            Didn't receive the code? <a onclick="resendCode()" id="resendBtn">Resend Code</a>
-            <span id="resendTimer" style="display: none;">Wait <span class="timer">60</span>s</span>
+        <div class="resend-section">
+            <span id="timerText" style="display: none;">Wait <span class="timer">60</span>s to resend</span>
+            <a onclick="resendCode()" id="resendBtn" class="disabled">Resend Code</a>
         </div>
 
         <div class="auth-footer">
@@ -249,6 +256,8 @@
     <script>
         const API_URL = "";
         let userEmail = '';
+        let resendTimer = null;
+        let resendEnabled = false;
 
         // Get email from URL or localStorage
         const urlParams = new URLSearchParams(window.location.search);
@@ -369,12 +378,15 @@
         }
 
         async function resendCode() {
-            const resendBtn = document.getElementById('resendBtn');
-            const timerSpan = document.getElementById('resendTimer');
-            const timerValue = timerSpan.querySelector('.timer');
+            if (!resendEnabled) return;
 
-            resendBtn.style.display = 'none';
-            timerSpan.style.display = 'inline';
+            const resendBtn = document.getElementById('resendBtn');
+            const timerText = document.getElementById('timerText');
+            const timerValue = timerText.querySelector('.timer');
+
+            // Disable button
+            resendBtn.classList.add('disabled');
+            resendEnabled = false;
 
             try {
                 const response = await fetch(`${API_URL}/api/auth/resend-verification`, {
@@ -387,42 +399,47 @@
 
                 if (response.ok) {
                     showAlert('New verification code sent! Check your email.', 'success');
+                    startResendTimer();
                 } else {
                     showAlert(data.error || 'Error resending code', 'error');
+                    // Re-enable button on error
+                    resendBtn.classList.remove('disabled');
+                    resendEnabled = true;
                 }
             } catch (error) {
                 showAlert('Error resending code: ' + error.message, 'error');
+                // Re-enable button on error
+                resendBtn.classList.remove('disabled');
+                resendEnabled = true;
             }
-
-            // Start countdown
-            let seconds = 60;
-            const interval = setInterval(() => {
-                seconds--;
-                timerValue.textContent = seconds;
-                if (seconds <= 0) {
-                    clearInterval(interval);
-                    resendBtn.style.display = 'inline';
-                    timerSpan.style.display = 'none';
-                }
-            }, 1000);
         }
 
         function startResendTimer() {
             const resendBtn = document.getElementById('resendBtn');
-            const timerSpan = document.getElementById('resendTimer');
-            const timerValue = timerSpan.querySelector('.timer');
+            const timerText = document.getElementById('timerText');
+            const timerValue = timerText.querySelector('.timer');
 
+            // Hide button, show timer
             resendBtn.style.display = 'none';
-            timerSpan.style.display = 'inline';
+            timerText.style.display = 'inline';
 
             let seconds = 60;
-            const interval = setInterval(() => {
+            timerValue.textContent = seconds;
+
+            // Clear any existing timer
+            if (resendTimer) {
+                clearInterval(resendTimer);
+            }
+
+            resendTimer = setInterval(() => {
                 seconds--;
                 timerValue.textContent = seconds;
                 if (seconds <= 0) {
-                    clearInterval(interval);
+                    clearInterval(resendTimer);
                     resendBtn.style.display = 'inline';
-                    timerSpan.style.display = 'none';
+                    timerText.style.display = 'none';
+                    resendBtn.classList.remove('disabled');
+                    resendEnabled = true;
                 }
             }, 1000);
         }
