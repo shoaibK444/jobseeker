@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            margin: 20px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+        }
+
+        .auth-header .logo {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input.error {
+            border-color: #dc3545;
+        }
+
+        .form-group input.success {
+            border-color: #28a745;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .home-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .home-link a {
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .home-link a:hover {
+            text-decoration: underline;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .remember-forgot a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+
+        .login-redirect-banner {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .login-redirect-banner a {
+            color: #667eea;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="logo">🔐</div>
+            <h1>Welcome Back</h1>
+            <p>Login to your Job Portal account</p>
+        </div>
+
+        <div id="redirectBanner" class="login-redirect-banner" style="display: none;">
+            <span id="redirectMessage"></span>
+        </div>
+
+        <div id="errorAlert" class="alert alert-error" style="display: none;"></div>
+        <div id="successAlert" class="alert alert-success" style="display: none;"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="loginEmail">Email or Username *</label>
+                <input type="text" id="loginEmail" placeholder="Enter your email or username" required>
+                <span class="error-message" id="emailError">Please enter a valid email or username</span>
+            </div>
+
+            <div class="form-group">
+                <label for="loginPassword">Password *</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                <span class="error-message" id="passwordError">Password is required</span>
+            </div>
+
+            <div class="remember-forgot">
+                <label>
+                    <input type="checkbox" id="rememberMe">
+                    Remember me
+                </label>
+                <a href="forgot-password.html">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submitBtn">Login</button>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account? <a href="signup.html">Sign up here</a>
+        </div>
+    </div>
+
+    <div class="home-link">
+        <a href="index.html">← Back to Home</a>
+    </div>
+
+    <script>
+        const API_URL = '';
+
+        // Check if already logged in
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            window.location.href = 'dashboard.html';
+        }
+
+        // Check for redirect from signup
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirected = urlParams.get('redirected');
+        const emailParam = urlParams.get('email');
+
+        if (redirected === 'true' && emailParam) {
+            const banner = document.getElementById('redirectBanner');
+            const message = document.getElementById('redirectMessage');
+            banner.style.display = 'block';
+            message.innerHTML = `Account created! Please login with your credentials. <a href="login.html?email=${encodeURIComponent(emailParam)}">Pre-fill email</a>`;
+            document.getElementById('loginEmail').value = decodeURIComponent(emailParam);
+        }
+
+        // Check for email verification success
+        const verified = urlParams.get('verified');
+        if (verified === 'true') {
+            const successAlert = document.getElementById('successAlert');
+            successAlert.style.display = 'block';
+            successAlert.textContent = 'Email verified successfully! You can now login.';
+        }
+
+        // Check for password reset success
+        const resetSuccess = urlParams.get('resetSuccess');
+        if (resetSuccess === 'true') {
+            const successAlert = document.getElementById('successAlert');
+            successAlert.style.display = 'block';
+            successAlert.textContent = 'Password reset successful! Please login with your new password.';
+        }
+
+        // Email/Username validation
+        function validateInput(input) {
+            // Allow email format or simple username (at least 2 chars)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const usernameRegex = /^[a-zA-Z0-9_]{2,}$/;
+            
+            if (emailRegex.test(input)) {
+                return 'email';
+            } else if (usernameRegex.test(input)) {
+                return 'username';
+            }
+            return null;
+        }
+
+        function showError(inputId, errorId) {
+            document.getElementById(inputId).classList.add('error');
+            document.getElementById(inputId).classList.remove('success');
+            document.getElementById(errorId).classList.add('visible');
+        }
+
+        function showSuccess(inputId, errorId) {
+            document.getElementById(inputId).classList.remove('error');
+            document.getElementById(inputId).classList.add('success');
+            document.getElementById(errorId).classList.remove('visible');
+        }
+
+        // Real-time validation
+        document.getElementById('loginEmail').addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                showError('loginEmail', 'emailError');
+            } else if (validateInput(this.value)) {
+                showSuccess('loginEmail', 'emailError');
+            } else {
+                showError('loginEmail', 'emailError');
+            }
+        });
+
+        document.getElementById('loginPassword').addEventListener('input', function() {
+            if (this.value.length > 0) {
+                showSuccess('loginPassword', 'passwordError');
+            }
+        });
+
+        function hideAlerts() {
+            document.getElementById('errorAlert').style.display = 'none';
+            document.getElementById('successAlert').style.display = 'none';
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            hideAlerts();
+
+            const emailOrUsername = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Basic validation
+            let isValid = true;
+            const inputType = validateInput(emailOrUsername);
+            
+            if (!inputType) {
+                showError('loginEmail', 'emailError');
+                isValid = false;
+            }
+            if (password.length === 0) {
+                showError('loginPassword', 'passwordError');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Logging in...';
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailOrUsername, password: password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+
+                    if (document.getElementById('rememberMe').checked) {
+                        localStorage.setItem('rememberMe', 'true');
+                    }
+
+                    alert('Login successful! Welcome back!');
+                    
+                    // Redirect admin to admin dashboard
+                    if (data.user.role === 'admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    // Check if email verification is required
+                    if (data.requiresVerification) {
+                        const errorAlert = document.getElementById('errorAlert');
+                        errorAlert.style.display = 'block';
+                        errorAlert.textContent = data.error;
+                        
+                        // Store email and redirect to verification page
+                        setTimeout(() => {
+                            localStorage.setItem('verificationEmail', data.email);
+                            window.location.href = `verify-email.html?email=${encodeURIComponent(data.email)}`;
+                        }, 2000);
+                        
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Login';
+                        return;
+                    }
+                    
+                    const errorMsg = data.error || 'Invalid email or password';
+                    const errorAlert = document.getElementById('errorAlert');
+                    errorAlert.style.display = 'block';
+                    errorAlert.textContent = errorMsg;
+
+                    if (errorMsg.includes('not found') || errorMsg.includes('Invalid') || errorMsg.includes('not registered')) {
+                        // Auto-redirect to signup page
+                        setTimeout(() => {
+                            window.location.href = 'signup.html?email=' + encodeURIComponent(email) + '&redirected=true';
+                        }, 1500);
+                    }
+
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Login';
+                }
+            } catch (error) {
+                const errorAlert = document.getElementById('errorAlert');
+                errorAlert.style.display = 'block';
+                errorAlert.textContent = 'Error logging in: ' + error.message;
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Assessment - Job Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 800px;
+            margin: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .info-box {
+            background: #cce5ff;
+            border: 1px solid #b8daff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #004085;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            color: #004085;
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+
+        .error-box {
+            background: #f8d7da;
+            border: 1px solid #dc3545;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .error-box h3 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .success-box h3 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .timer.warning {
+            color: #dc3545;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .result-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .score-circle .score {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .score-circle .label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .pass-badge {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .pass-badge.pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .pass-badge.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-item .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-item .label {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer" id="timer">⏱️ 30:00</div>
+
+    <div class="container" id="testContainer">
+        <div class="header">
+            <h1>📝 Skills Assessment Test</h1>
+            <p>Test your knowledge in your field of study</p>
+        </div>
+
+        <!-- Initial Info -->
+        <div id="infoSection">
+            <div class="info-box">
+                <h3>Test Information</h3>
+                <ul>
+                    <li><strong>Total Questions:</strong> 10 questions</li>
+                    <li><strong>Time Limit:</strong> 30 minutes</li>
+                    <li><strong>Passing Score:</strong> 60% (6 out of 10)</li>
+                    <li><strong>Retake Policy:</strong> If you fail, you can retake the test after 6 hours</li>
+                </ul>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="startTest()">Start Test</button>
+        </div>
+
+        <!-- Test Questions -->
+        <div id="testSection" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div id="questionContainer"></div>
+            <div class="navigation">
+                <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next</button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="resultSection" style="display: none;"></div>
+    </div>
+
+    <script>
+        const API_URL = '';
+        let questions = [];
+        let currentQuestion = 0;
+        let answers = [];
+        let timeLeft = 30 * 60; // 30 minutes in seconds
+        let timerInterval;
+        let testData = {};
+
+        // Check authentication
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        if (currentUser.role === 'admin') {
+            window.location.href = 'admin-dashboard.html';
+        }
+
+        // Load test data and check eligibility
+        async function initTest() {
+            try {
+                // Get user profile
+                const profileResponse = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!profileResponse.ok) {
+                    window.location.href = 'onboarding.html';
+                    return;
+                }
+
+                const user = await profileResponse.json();
+                
+                if (!user.profile || !user.profile.fieldOfStudy) {
+                    window.location.href = 'onboarding.html';
+                    return;
+                }
+
+                // Check test eligibility
+                if (user.profile.testAttempts) {
+                    const lastAttempt = user.profile.testAttempts[user.profile.testAttempts.length - 1];
+                    if (lastAttempt && !lastAttempt.passed) {
+                        const lastAttemptTime = new Date(lastAttempt.date).getTime();
+                        const now = Date.now();
+                        const hoursPassed = (now - lastAttemptTime) / (1000 * 60 * 60);
+                        
+                        if (hoursPassed < 6) {
+                            const hoursRemaining = Math.ceil(6 - hoursPassed);
+                            showError(`You can retake the test in ${hoursRemaining} hour(s).`);
+                            return;
+                        }
+                    }
+                }
+
+                // Get questions based on field of study
+                questions = getQuestionsByField(user.profile.fieldOfStudy);
+                if (questions.length === 0) {
+                    questions = getDefaultQuestions();
+                }
+
+                testData = {
+                    fieldOfStudy: user.profile.fieldOfStudy,
+                    skills: user.profile.skills || []
+                };
+
+            } catch (error) {
+                console.error('Error initializing test:', error);
+            }
+        }
+
+        function getQuestionsByField(field) {
+            // Use questions from server.js (already defined)
+            const allQuestions = {
+                'IT': [
+                    { question: 'What does HTML stand for?', options: ['Hyper Text Markup Language', 'High Tech Modern Language', 'Hyper Transfer Markup Language', 'Home Tool Markup Language'], answer: 0 },
+                    { question: 'Which programming language is known as the scripting language for the web?', options: ['Java', 'Python', 'JavaScript', 'C++'], answer: 2 },
+                    { question: 'What is the correct way to declare a variable in JavaScript?', options: ['var x = 5;', 'variable x = 5;', 'v x = 5;', 'declare x = 5;'], answer: 0 },
+                    { question: 'What is Git?', options: ['A programming language', 'A version control system', 'A database', 'An operating system'], answer: 1 },
+                    { question: 'Which of the following is a NoSQL database?', options: ['MySQL', 'PostgreSQL', 'MongoDB', 'Oracle'], answer: 2 },
+                    { question: 'What is CSS used for?', options: ['Designing database schemas', 'Debugging code', 'Styling web pages', 'Server-side programming'], answer: 2 },
+                    { question: 'What is an API?', options: ['Application Programming Interface', 'Automated Program Integration', 'Application Process Integration', 'Automated Programming Interface'], answer: 0 },
+                    { question: 'What is the purpose of a loop in programming?', options: ['To store data', 'To make decisions', 'To repeat code', 'To define functions'], answer: 2 },
+                    { question: 'What is cloud computing?', options: ['Programming for weather apps', 'Using remote servers for storage and processing', 'A type of computer hardware', 'A programming language'], answer: 1 },
+                    { question: 'What is cybersecurity?', options: ['Protecting computer systems from theft', 'Designing user interfaces', 'Writing code documentation', 'Testing software'], answer: 0 }
+                ],
+                'Marketing': [
+                    { question: 'What is the 4Ps of marketing?', options: ['Product, Price, Place, Promotion', 'People, Process, Performance, Profit', 'Planning, Processing, Purchasing, Promotion', 'Product, People, Price, Process'], answer: 0 },
+                    { question: 'What is SEO?', options: ['Search Engine Optimization', 'Social Media Engagement', 'Sales Enhancement Option', 'Strategic Email Operation'], answer: 0 },
+                    { question: 'What does KPI stand for?', options: ['Key Performance Indicator', 'Knowledge Processing Index', 'Key Process Integration', 'Knowledge Performance Index'], answer: 0 },
+                    { question: 'What is a target audience?', options: ['A group of competitors', 'A specific group of consumers', 'A marketing team', 'A sales strategy'], answer: 1 },
+                    { question: 'What is content marketing?', options: ['Creating content only for social media', 'Writing product descriptions', 'Creating and sharing valuable content', 'Advertising products'], answer: 2 },
+                    { question: 'What is a brand?', options: ['A company logo', 'A product name', 'The identity and perception of a company', 'A type of product'], answer: 2 },
+                    { question: 'What is market research?', options: ['Selling products', 'Gathering information about customers and market', 'Marketing to competitors', 'Creating advertisements'], answer: 1 },
+                    { question: 'What is a marketing funnel?', options: ['A sales tool', 'A visualization of customer journey', 'A pricing strategy', 'A product design'], answer: 1 },
+                    { question: 'What is email marketing?', options: ['Sending spam emails', 'Sending targeted emails to prospects', 'Writing business letters', 'Creating email software'], answer: 1 },
+                    { question: 'What is social media marketing?', options: ['Using social platforms for advertising', 'Creating social networks', 'Testing products', 'Managing customer service'], answer: 0 }
+                ],
+                'Design': [
+                    { question: 'What does UI stand for?', options: ['User Interface', 'Universal Input', 'Unified Integration', 'User Input'], answer: 0 },
+                    { question: 'What does UX stand for?', options: ['User Experience', 'Universal Exchange', 'User Extension', 'Unified Experience'], answer: 0 },
+                    { question: 'What is a color wheel?', options: ['A software tool', 'A circular representation of colors', 'A drawing tool', 'A font type'], answer: 1 },
+                    { question: 'What is typography?', options: ['Writing code', 'The art of arranging text', 'Creating logos', 'Building websites'], answer: 1 },
+                    { question: 'What is whitespace in design?', options: ['White colored areas only', 'Empty space between elements', 'Background color', 'A software tool'], answer: 1 },
+                    { question: 'What is a wireframe?', options: ['A coding framework', 'A basic visual guide', 'A font style', 'A color palette'], answer: 1 },
+                    { question: 'What is responsive design?', options: ['Designing for mobile only', 'Creating adaptive layouts for different devices', 'A graphic design style', 'A typography technique'], answer: 1 },
+                    { question: 'What are complementary colors?', options: ['Colors that are the same', 'Colors opposite on the color wheel', 'Primary colors', 'Dark colors'], answer: 1 },
+                    { question: 'What is hierarchy in design?', options: ['A company structure', 'Visual arrangement to show importance', 'A font style', 'A color theory'], answer: 1 },
+                    { question: 'What is a portfolio?', options: ['A collection of work samples', 'A design software', 'A color palette', 'A font type'], answer: 0 }
+                ],
+                'Finance': [
+                    { question: 'What is ROI?', options: ['Rate of Investment', 'Return on Investment', 'Revenue of Income', 'Return on Income'], answer: 1 },
+                    { question: 'What is a balance sheet?', options: ['A sheet that balances', 'A financial statement showing assets and liabilities', 'A tax form', 'A bank statement'], answer: 1 },
+                    { question: 'What is inflation?', options: ['Increase in prices over time', 'Decrease in economy', 'A type of tax', 'A government policy'], answer: 0 },
+                    { question: 'What is compound interest?', options: ['Simple calculation', 'Interest calculated on initial principal and accumulated interest', 'A fixed rate', 'A tax form'], answer: 1 },
+                    { question: 'What is a budget?', options: ['A yearly plan', 'A plan for income and expenses', 'A tax return', 'A bank account'], answer: 1 },
+                    { question: 'What is diversification?', options: ['Focusing on one investment', 'Spreading investments to reduce risk', 'A banking service', 'A tax strategy'], answer: 1 },
+                    { question: 'What is a stock?', options: ['A type of bond', 'A share in company ownership', 'A currency', 'A real estate property'], answer: 1 },
+                    { question: 'What is a credit score?', options: ['A loan amount', 'A numerical representation of creditworthiness', 'A bank account number', 'A salary amount'], answer: 1 },
+                    { question: 'What is an audit?', options: ['A financial investigation', 'A tax form', 'A loan application', 'A bank service'], answer: 0 },
+                    { question: 'What is profit?', options: ['Total revenue', 'Money gained after expenses', 'A business type', 'A tax'], answer: 1 }
+                ],
+                'Sales': [
+                    { question: 'What is a sales funnel?', options: ['A product delivery system', 'A visual representation of the sales process', 'A pricing strategy', 'A marketing campaign'], answer: 1 },
+                    { question: 'What is a lead?', options: ['A potential customer', 'A sales manager', 'A product type', 'A store location'], answer: 0 },
+                    { question: 'What is closing in sales?', options: ['Ending a conversation', 'Completing a sale', 'Closing a store', 'Taking inventory'], answer: 1 },
+                    { question: 'What is a value proposition?', options: ['A product price', 'A statement explaining why customer should buy', 'A sales pitch', 'A marketing slogan'], answer: 1 },
+                    { question: 'What is CRM?', options: ['Customer Relationship Management', 'Sales Reporting Method', 'Company Resource Management', 'Client Retention Measure'], answer: 0 },
+                    { question: 'What is cold calling?', options: ['Calling in winter', 'Contacting potential customers who have not expressed interest', 'Calling existing customers', 'A marketing technique'], answer: 1 },
+                    { question: 'What is upselling?', options: ['Selling at a higher price', 'Encouraging customers to buy more expensive items', 'A discount technique', 'A product bundle'], answer: 1 },
+                    { question: 'What is a quota?', options: ['A sales target', 'A type of discount', 'A product category', 'A customer type'], answer: 0 },
+                    { question: 'What is objection handling?', options: ['Dealing with customer concerns', 'Solving technical problems', 'Managing returns', 'Processing complaints'], answer: 0 },
+                    { question: 'What is follow-up?', options: ['A final meeting', 'Continuing communication with prospects', 'A sales report', 'A product update'], answer: 1 }
+                ],
+                'HR': [
+                    { question: 'What is recruitment?', options: ['Hiring new employees', 'Training staff', 'Firing employees', 'Managing payroll'], answer: 0 },
+                    { question: 'What is an interview?', options: ['A formal meeting to evaluate candidates', 'A performance review', 'A salary negotiation', 'A training session'], answer: 0 },
+                    { question: 'What is performance appraisal?', options: ['Evaluating employee performance', 'Appraising company assets', 'Reviewing products', 'Assessing market value'], answer: 0 },
+                    { question: 'What is employee engagement?', options: ['Hiring process', 'The involvement and enthusiasm of employees', 'A training program', 'A benefits package'], answer: 1 },
+                    { question: 'What is onboarding?', options: ['The process of integrating new employees', 'Ending employment', 'A performance review', 'A salary discussion'], answer: 0 },
+                    { question: 'What is a job description?', options: ['A list of job openings', 'A document detailing job responsibilities', 'A employee contract', 'A company policy'], answer: 1 },
+                    { question: 'What is workplace culture?', options: ['Office decorations', 'The environment and values of an organization', 'A dress code', 'A company logo'], answer: 1 },
+                    { question: 'What is employee retention?', options: ['Keeping employees in the organization', 'A training program', 'A performance metric', 'A benefit plan'], answer: 0 },
+                    { question: 'What is training and development?', options: ['Firing underperforming employees', 'Improving employee skills and knowledge', 'A recruitment method', 'A compensation strategy'], answer: 1 },
+                    { question: 'What is conflict resolution?', options: ['A hiring process', 'Finding solutions to workplace disagreements', 'A performance review', 'A termination procedure'], answer: 1 }
+                ],
+                'Engineering': [
+                    { question: 'What is the first law of thermodynamics?', options: ['Energy cannot be created or destroyed', 'Energy can be created', 'Energy decreases over time', 'Energy increases forever'], answer: 0 },
+                    { question: 'What is CAD?', options: ['Computer Aided Design', 'Computer Application Development', 'Computer Analysis Data', 'Computer Algorithm Design'], answer: 0 },
+                    { question: 'What is stress in materials?', options: ['Mental pressure', 'Force per unit area', 'A type of strain', 'A manufacturing defect'], answer: 1 },
+                    { question: 'What is a lever?', options: ['A simple machine', 'A measurement unit', 'A type of material', 'A power source'], answer: 0 },
+                    { question: 'What is Ohm\'s law?', options: ['V = IR', 'E = mc²', 'F = ma', 'PV = nRT'], answer: 0 },
+                    { question: 'What is a pulley?', options: ['A lifting device', 'A measuring tool', 'A power source', 'A material type'], answer: 0 },
+                    { question: 'What is tensile strength?', options: ['The ability to conduct electricity', 'The maximum stress a material can withstand', 'The ability to resist heat', 'The flexibility of a material'], answer: 1 },
+                    { question: 'What is a gear?', options: ['A rotating machine element', 'A measurement tool', 'A power source', 'A safety device'], answer: 0 },
+                    { question: 'What is structural analysis?', options: ['Analyzing chemical compounds', 'Examining the behavior of structures under loads', 'Testing materials', 'Designing circuits'], answer: 1 },
+                    { question: 'What is thermodynamics?', options: ['The study of heat and work', 'The study of motion', 'The study of electricity', 'The study of materials'], answer: 0 }
+                ]
+            };
+
+            return allQuestions[field] || [];
+        }
+
+        function getDefaultQuestions() {
+            return [
+                { question: 'What is your career goal?', options: ['Find a job', 'Build skills', 'Advance career', 'Start business'], answer: 0 },
+                { question: 'How many years of experience do you have?', options: ['None (Fresh Graduate)', '1-2 years', '3-5 years', '5+ years'], answer: 0 },
+                { question: 'What is your education level?', options: ['High School', 'Bachelor\'s Degree', 'Master\'s Degree', 'PhD'], answer: 1 },
+                { question: 'Are you currently employed?', options: ['Yes, employed', 'No, seeking opportunities', 'Self-employed', 'Student'], answer: 1 },
+                { question: 'What is your preferred work arrangement?', options: ['Remote', 'On-site', 'Hybrid', 'Flexible'], answer: 0 },
+                { question: 'What is your primary skill?', options: ['Technical', 'Creative', 'Analytical', 'Communication'], answer: 0 },
+                { question: 'How do you handle stress?', options: ['Meditation', 'Exercise', 'Time management', 'All of the above'], answer: 3 },
+                { question: 'What motivates you most?', options: ['Money', 'Recognition', 'Purpose', 'Growth'], answer: 2 },
+                { question: 'How do you solve problems?', options: ['Analyze', 'Research', 'Collaborate', 'All approaches'], answer: 3 },
+                { question: 'What is your work style?', options: ['Independent', 'Team player', 'Leader', 'Flexible'], answer: 1 }
+            ];
+        }
+
+        function showError(message) {
+            document.getElementById('infoSection').innerHTML = `
+                <div class="error-box">
+                    <h3>⚠️ Test Not Available</h3>
+                    <p>${message}</p>
+                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="window.location.href='dashboard.html'">Go to Dashboard</button>
+                </div>
+            `;
+        }
+
+        function startTest() {
+            document.getElementById('infoSection').style.display = 'none';
+            document.getElementById('testSection').style.display = 'block';
+            
+            // Initialize answers array
+            answers = new Array(questions.length).fill(null);
+            
+            // Start timer
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Show first question
+            renderQuestion();
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timerEl = document.getElementById('timer');
+            timerEl.textContent = `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 300) {
+                timerEl.classList.add('warning');
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitTest();
+            }
+        }
+
+        function renderQuestion() {
+            const question = questions[currentQuestion];
+            const container = document.getElementById('questionContainer');
+            
+            const optionsHtml = question.options.map((opt, idx) => `
+                <div class="option ${answers[currentQuestion] === idx ? 'selected' : ''}" 
+                     onclick="selectOption(${idx})">
+                    ${opt}
+                </div>
+            `).join('');
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Question ${currentQuestion + 1} of ${questions.length}</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">${optionsHtml}</div>
+                </div>
+            `;
+            
+            // Update progress
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Submit Test' : 'Next';
+        }
+
+        function selectOption(optionIndex) {
+            answers[currentQuestion] = optionIndex;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (answers[currentQuestion] === null) {
+                alert('Please select an answer before continuing.');
+                return;
+            }
+            
+            if (currentQuestion === questions.length - 1) {
+                submitTest();
+            } else {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function calculateProfileScore(profile, passed, score) {
+            // Calculate profile score based on multiple factors
+            let totalScore = 0;
+            
+            // Base score from skill test (up to 50 points)
+            if (passed) {
+                totalScore += 50 + Math.min(score - 60, 20); // 50-70 points if passed
+            } else {
+                totalScore += Math.floor(score * 0.5); // 0-30 points if failed
+            }
+            
+            // Experience points (up to 30 points)
+            const experienceYears = profile.experience?.years || 0;
+            totalScore += Math.min(experienceYears * 3, 30);
+            
+            // Education points (up to 20 points)
+            const educationLevel = profile.education?.level || '';
+            const educationScores = {
+                'PhD': 20,
+                'Masters': 17,
+                'Bachelors': 14,
+                'Diploma': 10,
+                'High School': 5
+            };
+            totalScore += educationScores[educationLevel] || 0;
+            
+            // Cap at 100
+            return Math.min(totalScore, 100);
+        }
+        
+        async function submitTest() {
+            clearInterval(timerInterval);
+            
+            // Calculate score
+            let correct = 0;
+            const results = questions.map((q, idx) => {
+                const isCorrect = answers[idx] === q.answer;
+                if (isCorrect) correct++;
+                return {
+                    question: q.question,
+                    correct: q.answer,
+                    userAnswer: answers[idx],
+                    isCorrect
+                };
+            });
+            
+            const score = Math.round((correct / questions.length) * 100);
+            const passed = score >= 60;
+            
+            // Save test result
+            try {
+                const profileResponse = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const user = await profileResponse.json();
+                
+                const testAttempts = user.profile.testAttempts || [];
+                testAttempts.push({
+                    date: new Date().toISOString(),
+                    score,
+                    passed,
+                    correct,
+                    total: questions.length,
+                    field: testData.fieldOfStudy,
+                    skills: testData.skills
+                });
+                
+                // Calculate profile score based on test performance
+                const profileScore = calculateProfileScore(user.profile, passed, score);
+                
+                await fetch(`${API_URL}/api/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        testAttempts,
+                        testPassed: passed,
+                        testScore: score,
+                        lastTestDate: new Date().toISOString(),
+                        profileScore: profileScore
+                    })
+                });
+            } catch (error) {
+                console.error('Error saving test result:', error);
+            }
+            
+            // Show results
+            showResults(score, correct, passed, results);
+        }
+
+        function showResults(score, correct, passed, results) {
+            document.getElementById('testSection').style.display = 'none';
+            document.getElementById('timer').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+            
+            const resultSection = document.getElementById('resultSection');
+            
+            if (passed) {
+                resultSection.innerHTML = `
+                    <div class="result-summary">
+                        <div class="pass-badge pass">✅ Congratulations! You Passed!</div>
+                        <div class="score-circle">
+                            <div class="score">${score}%</div>
+                            <div class="label">Your Score</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="value">${correct}</div>
+                                <div class="label">Correct</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="value">${questions.length - correct}</div>
+                                <div class="label">Incorrect</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="value">${questions.length}</div>
+                                <div class="label">Total</div>
+                            </div>
+                        </div>
+                        <p style="color: #666; margin-bottom: 20px;">You answered ${correct} out of ${questions.length} questions correctly.</p>
+                        <button class="btn btn-primary" onclick="window.location.href='dashboard.html'">Go to Dashboard</button>
+                    </div>
+                `;
+            } else {
+                const hoursUntilRetry = 6;
+                resultSection.innerHTML = `
+                    <div class="result-summary">
+                        <div class="pass-badge fail">❌ Keep Trying!</div>
+                        <div class="score-circle" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                            <div class="score">${score}%</div>
+                            <div class="label">Your Score</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="value">${correct}</div>
+                                <div class="label">Correct</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="value">${questions.length - correct}</div>
+                                <div class="label">Incorrect</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="value">${questions.length}</div>
+                                <div class="label">Total</div>
+                            </div>
+                        </div>
+                        <div class="warning-box">
+                            <strong>Passing Score Required: 60%</strong><br>
+                            You can retake the test after ${hoursUntilRetry} hours.
+                        </div>
+                        <button class="btn btn-warning" onclick="window.location.href='dashboard.html'">Go to Dashboard</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize
+        initTest();
+    </script>
+</body>
+</html>

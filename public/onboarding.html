@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile - Job Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .step.completed {
+            background: #28a745;
+            color: white;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input.error {
+            border-color: #dc3545;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .navigation-buttons .btn {
+            flex: 1;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+
+        /* Profile Image Upload */
+        .profile-image-upload {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 4px solid #667eea;
+        }
+
+        .profile-image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-image-preview .placeholder {
+            font-size: 60px;
+            color: #999;
+        }
+
+        .profile-image-upload input[type="file"] {
+            display: none;
+        }
+
+        .profile-image-upload label {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Skills */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .skill-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-tag .remove-skill {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .skill-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .skill-input-group input {
+            flex: 1;
+        }
+
+        .skill-input-group button {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Experience Item */
+        .experience-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .experience-item .remove-exp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Profile Level Badge */
+        .level-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .level-new {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .level-junior {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .level-mid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .level-senior {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .level-expert {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Progress Bar for Level */
+        .level-progress {
+            margin-top: 15px;
+        }
+
+        .level-progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .level-progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .level-progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Complete Your Profile</h1>
+            <p>Fill in all details to complete your registration</p>
+        </div>
+
+        <div class="level-badge level-new" id="levelBadge">📊 Level: Newcomer</div>
+
+        <div id="levelProgress" class="level-progress">
+            <div class="level-progress-bar">
+                <div class="level-progress-fill" id="levelProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="level-progress-text">
+                <span>Newcomer</span>
+                <span id="levelPercentage">0%</span>
+                <span>Expert</span>
+            </div>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- Step 1: Personal Info -->
+        <div class="step-content active" id="step1Content">
+            <h3 class="section-title">👤 Personal Information</h3>
+
+            <div class="profile-image-upload">
+                <div class="profile-image-preview" id="imagePreview">
+                    <span class="placeholder">📷</span>
+                </div>
+                <label for="profileImage">
+                    📷 Upload Profile Photo *
+                </label>
+                <input type="file" id="profileImage" accept="image/*" onchange="previewImage(event)">
+            </div>
+            <p style="text-align: center; color: #666; font-size: 12px; margin-bottom: 20px;">Profile photo is required</p>
+
+            <form id="personalForm" onsubmit="savePersonalInfo(event)">
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cnic">CNIC Number *</label>
+                    <input type="text" id="cnic" placeholder="e.g., 12345-1234567-1" required pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}">
+                    <small style="color: #666;">Format: 12345-1234567-1</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" placeholder="e.g., +92-300-1234567" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Current Address *</label>
+                    <textarea id="address" rows="2" placeholder="Enter your current address" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth *</label>
+                    <input type="date" id="dob" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save & Continue</button>
+            </form>
+        </div>
+
+        <!-- Step 2: Education -->
+        <div class="step-content" id="step2Content">
+            <h3 class="section-title">🎓 Education</h3>
+
+            <form id="educationForm" onsubmit="saveEducation(event)">
+                <div class="form-group">
+                    <label for="degree">Highest Degree *</label>
+                    <select id="degree" required>
+                        <option value="">Select your degree</option>
+                        <option value="high_school">High School</option>
+                        <option value="diploma">Diploma</option>
+                        <option value="bachelors">Bachelor's Degree</option>
+                        <option value="masters">Master's Degree</option>
+                        <option value="phd">PhD</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fieldOfStudy">Field of Study *</label>
+                    <select id="fieldOfStudy" required>
+                        <option value="">Select field</option>
+                        <option value="IT">Information Technology</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Design">Design</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Sales">Sales</option>
+                        <option value="HR">Human Resources</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="institution">Institution/University *</label>
+                    <input type="text" id="institution" placeholder="Enter institution name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="graduationYear">Graduation Year *</label>
+                    <input type="number" id="graduationYear" min="1950" max="2030" placeholder="Enter year" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cgpa">CGPA / Percentage</label>
+                    <input type="text" id="cgpa" placeholder="e.g., 3.5/4.0 or 85%">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save & Continue</button>
+            </form>
+        </div>
+
+        <!-- Step 3: Skills -->
+        <div class="step-content" id="step3Content">
+            <h3 class="section-title">💪 Skills</h3>
+
+            <div class="info-box">
+                <strong>Add your skills</strong><br>
+                Add skills relevant to your field. These affect your profile level!
+            </div>
+
+            <div class="form-group">
+                <label>Your Skills</label>
+                <div class="skills-container" id="skillsContainer"></div>
+            </div>
+
+            <div class="skill-input-group">
+                <input type="text" id="skillInput" placeholder="Type a skill and press Enter">
+                <button type="button" onclick="addSkill()">Add</button>
+            </div>
+
+            <div id="suggestedSkills" class="form-group" style="margin-top: 15px;"></div>
+
+            <div class="navigation-buttons">
+                <button class="btn btn-secondary" onclick="goToStep(2)">Back</button>
+                <button class="btn btn-primary" onclick="saveSkillsAndContinue()">Save & Continue</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Experience -->
+        <div class="step-content" id="step4Content">
+            <h3 class="section-title">💼 Work Experience</h3>
+
+            <div id="experienceContainer"></div>
+
+            <button class="btn btn-secondary" onclick="addExperience()" style="margin-bottom: 20px;">+ Add Experience</button>
+
+            <form id="experienceForm" onsubmit="saveExperience(event)">
+                <div class="form-group">
+                    <label for="totalYears">Total Years of Experience *</label>
+                    <select id="totalYears" required>
+                        <option value="">Select</option>
+                        <option value="0">Fresh Graduate (0 years)</option>
+                        <option value="1">1-2 years</option>
+                        <option value="3">3-5 years</option>
+                        <option value="5">5-10 years</option>
+                        <option value="10">10+ years</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="currentCompany">Current Company (if employed)</label>
+                    <input type="text" id="currentCompany" placeholder="Enter company name">
+                </div>
+
+                <div class="form-group">
+                    <label for="jobTitle">Current Job Title</label>
+                    <input type="text" id="jobTitle" placeholder="Enter your current position">
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="btn btn-secondary" onclick="goToStep(3)">Back</button>
+                    <button type="submit" class="btn btn-primary">Save & Continue</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Step 5: Review & Test -->
+        <div class="step-content" id="step5Content">
+            <h3 class="section-title">✅ Review & Take Test</h3>
+
+            <div class="info-box">
+                <strong>Complete your profile!</strong><br>
+                Take the skills assessment test to complete your registration and unlock your profile level.
+            </div>
+
+            <div id="profileSummary"></div>
+
+            <button class="btn btn-primary" style="margin-top: 20px;" onclick="startTest()">🎯 Take Skills Assessment Test</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '';
+        let currentStep = 1;
+        let skills = [];
+        let profileImage = null;
+        let profileData = {};
+
+        // Level thresholds
+        const LEVELS = [
+            { name: 'Newcomer', minScore: 0, class: 'level-new' },
+            { name: 'Junior', minScore: 20, class: 'level-junior' },
+            { name: 'Mid-Level', minScore: 40, class: 'level-mid' },
+            { name: 'Senior', minScore: 60, class: 'level-senior' },
+            { name: 'Expert', minScore: 80, class: 'level-expert' }
+        ];
+
+        // Skills suggestions by field
+        const skillsByField = {
+            'IT': ['JavaScript', 'Python', 'Java', 'React', 'Node.js', 'SQL', 'HTML', 'CSS', 'Git', 'AWS', 'Docker', 'Kubernetes'],
+            'Marketing': ['SEO', 'Social Media', 'Content Marketing', 'Google Analytics', 'Email Marketing', 'Copywriting', 'Branding'],
+            'Design': ['Photoshop', 'Illustrator', 'Figma', 'UI/UX', 'Typography', 'Color Theory', 'Adobe XD', 'Sketch'],
+            'Finance': ['Excel', 'Financial Analysis', 'Budgeting', 'Accounting', 'QuickBooks', 'Tax Planning', 'Investment'],
+            'Sales': ['CRM', 'Negotiation', 'Lead Generation', 'Cold Calling', 'Sales Forecasting', 'Account Management'],
+            'HR': ['Recruitment', 'Employee Relations', 'HRIS', 'Performance Management', 'Training', ' payroll'],
+            'Engineering': ['CAD', 'MATLAB', 'AutoCAD', 'Project Management', 'Statistics', 'CAD Design', 'Python'],
+            'Other': ['Communication', 'Problem Solving', 'Teamwork', 'Time Management', 'Leadership']
+        };
+
+        // Check authentication
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        if (currentUser.role === 'admin') {
+            window.location.href = 'admin-dashboard.html';
+        }
+
+        // Load existing profile
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    if (user.profile) {
+                        profileData = { ...user.profile };
+                        
+                        // Populate form fields
+                        if (profileData.name) document.getElementById('fullName').value = profileData.name;
+                        if (profileData.cnic) document.getElementById('cnic').value = profileData.cnic;
+                        if (profileData.phone) document.getElementById('phone').value = profileData.phone;
+                        if (profileData.address) document.getElementById('address').value = profileData.address;
+                        if (profileData.dob) document.getElementById('dob').value = profileData.dob;
+                        if (profileData.degree) document.getElementById('degree').value = profileData.degree;
+                        if (profileData.fieldOfStudy) document.getElementById('fieldOfStudy').value = profileData.fieldOfStudy;
+                        if (profileData.institution) document.getElementById('institution').value = profileData.institution;
+                        if (profileData.graduationYear) document.getElementById('graduationYear').value = profileData.graduationYear;
+                        if (profileData.cgpa) document.getElementById('cgpa').value = profileData.cgpa;
+                        if (profileData.skills) skills = profileData.skills;
+                        if (profileData.totalYears) document.getElementById('totalYears').value = profileData.totalYears;
+                        if (profileData.currentCompany) document.getElementById('currentCompany').value = profileData.currentCompany;
+                        if (profileData.jobTitle) document.getElementById('jobTitle').value = profileData.jobTitle;
+                        if (profileData.experience) {
+                            profileData.experience.forEach(exp => addExperience(exp));
+                        }
+                        
+                        renderSkills();
+                        updateLevelBadge();
+                        
+                        // If profile image exists
+                        if (profileData.profileImage) {
+                            document.getElementById('imagePreview').innerHTML = `<img src="${profileData.profileImage}" alt="Profile">`;
+                        }
+                        
+                        // If test completed, go to step 5
+                        if (profileData.testPassed !== undefined) {
+                            showProfileSummary();
+                            goToStep(5);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        function goToStep(step) {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${step}Content`).classList.add('active');
+            currentStep = step;
+        }
+
+        // Image Preview
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImage = e.target.result;
+                    document.getElementById('imagePreview').innerHTML = `<img src="${profileImage}" alt="Profile">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Step 1: Personal Info
+        function savePersonalInfo(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('fullName').value;
+            const cnic = document.getElementById('cnic').value;
+            
+            if (!profileImage) {
+                showAlert('Please upload your profile photo', 'error');
+                return;
+            }
+            
+            if (!validateCNIC(cnic)) {
+                showAlert('Please enter a valid CNIC format (12345-1234567-1)', 'error');
+                return;
+            }
+            
+            profileData.name = name;
+            profileData.cnic = cnic;
+            profileData.phone = document.getElementById('phone').value;
+            profileData.address = document.getElementById('address').value;
+            profileData.dob = document.getElementById('dob').value;
+            profileData.profileImage = profileImage;
+            
+            goToStep(2);
+        }
+
+        function validateCNIC(cnic) {
+            const regex = /^[0-9]{5}-[0-9]{7}-[0-9]{1}$/;
+            return regex.test(cnic);
+        }
+
+        // Step 2: Education
+        function saveEducation(event) {
+            event.preventDefault();
+            
+            profileData.degree = document.getElementById('degree').value;
+            profileData.fieldOfStudy = document.getElementById('fieldOfStudy').value;
+            profileData.institution = document.getElementById('institution').value;
+            profileData.graduationYear = document.getElementById('graduationYear').value;
+            profileData.cgpa = document.getElementById('cgpa').value;
+            
+            // Update suggested skills
+            updateSuggestedSkills(profileData.fieldOfStudy);
+            
+            goToStep(3);
+        }
+
+        function updateSuggestedSkills(field) {
+            const container = document.getElementById('suggestedSkills');
+            const suggestions = skillsByField[field] || skillsByField['Other'];
+            
+            container.innerHTML = `
+                <label>Suggested Skills for ${field}:</label>
+                <div style="margin-top: 10px;">
+                    ${suggestions
+                        .filter(s => !skills.includes(s))
+                        .map(s => `<button type="button" onclick="addSuggestedSkill('${s}')" style="margin: 4px; padding: 6px 12px; border: 1px solid #667eea; background: white; color: #667eea; border-radius: 20px; cursor: pointer;">${s}</button>`)
+                        .join('')}
+                </div>
+            `;
+        }
+
+        // Step 3: Skills
+        function addSkill() {
+            const input = document.getElementById('skillInput');
+            const skill = input.value.trim();
+            
+            if (skill && !skills.includes(skill)) {
+                skills.push(skill);
+                renderSkills();
+                input.value = '';
+                updateSuggestedSkills(profileData.fieldOfStudy || 'Other');
+            }
+        }
+
+        function addSuggestedSkill(skill) {
+            if (!skills.includes(skill)) {
+                skills.push(skill);
+                renderSkills();
+                updateSuggestedSkills(profileData.fieldOfStudy || 'Other');
+            }
+        }
+
+        function removeSkill(skill) {
+            skills = skills.filter(s => s !== skill);
+            renderSkills();
+        }
+
+        function renderSkills() {
+            const container = document.getElementById('skillsContainer');
+            container.innerHTML = skills.map(s => `
+                <div class="skill-tag">
+                    ${s}
+                    <span class="remove-skill" onclick="removeSkill('${s}')">&times;</span>
+                </div>
+            `).join('');
+        }
+
+        function saveSkillsAndContinue() {
+            profileData.skills = skills;
+            goToStep(4);
+        }
+
+        // Step 4: Experience
+        function addExperience(data = {}) {
+            const container = document.getElementById('experienceContainer');
+            const id = Date.now();
+            
+            const expHtml = `
+                <div class="experience-item" id="exp${id}">
+                    <button class="remove-exp" onclick="removeExperience(${id})">Remove</button>
+                    <h4>Experience</h4>
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" class="exp-company" value="${data.company || ''}" placeholder="Company name">
+                    </div>
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input type="text" class="exp-position" value="${data.position || ''}" placeholder="Your role">
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (years)</label>
+                        <input type="number" class="exp-duration" value="${data.duration || ''}" placeholder="Years worked" min="0" step="0.5">
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', expHtml);
+        }
+
+        function removeExperience(id) {
+            document.getElementById(`exp${id}`).remove();
+        }
+
+        function getExperienceData() {
+            const experiences = [];
+            document.querySelectorAll('.experience-item').forEach(item => {
+                const company = item.querySelector('.exp-company').value;
+                const position = item.querySelector('.exp-position').value;
+                const duration = item.querySelector('.exp-duration').value;
+                
+                if (company || position) {
+                    experiences.push({ company, position, duration });
+                }
+            });
+            return experiences;
+        }
+
+        function saveExperience(event) {
+            event.preventDefault();
+            
+            profileData.experience = getExperienceData();
+            profileData.totalYears = document.getElementById('totalYears').value;
+            profileData.currentCompany = document.getElementById('currentCompany').value;
+            profileData.jobTitle = document.getElementById('jobTitle').value;
+            
+            // Calculate profile completion
+            updateLevelBadge();
+            
+            showProfileSummary();
+            goToStep(5);
+        }
+
+        // Profile Level System
+        function calculateProfileScore() {
+            let score = 0;
+            
+            // Profile image: 10 points
+            if (profileData.profileImage) score += 10;
+            
+            // Complete personal info: 10 points
+            if (profileData.name && profileData.cnic && profileData.phone && profileData.address && profileData.dob) score += 10;
+            
+            // Education: 15 points
+            if (profileData.degree && profileData.fieldOfStudy && profileData.institution) score += 15;
+            
+            // Skills: 15 points (1 point per skill, max 15)
+            score += Math.min(profileData.skills?.length || 0, 15);
+            
+            // Experience: 15 points
+            if (profileData.totalYears) score += 15;
+            
+            // Test score: 35 points (test is 60% of profile)
+            if (profileData.testScore) score += Math.round(profileData.testScore * 0.35);
+            
+            return Math.min(score, 100);
+        }
+
+        function updateLevelBadge() {
+            const score = calculateProfileScore();
+            let currentLevel = LEVELS[0];
+            
+            for (let i = LEVELS.length - 1; i >= 0; i--) {
+                if (score >= LEVELS[i].minScore) {
+                    currentLevel = LEVELS[i];
+                    break;
+                }
+            }
+            
+            const badge = document.getElementById('levelBadge');
+            badge.textContent = `📊 Level: ${currentLevel.name}`;
+            badge.className = `level-badge ${currentLevel.class}`;
+            
+            document.getElementById('levelProgressFill').style.width = `${score}%`;
+            document.getElementById('levelPercentage').textContent = `${score}%`;
+        }
+
+        function showProfileSummary() {
+            const summary = document.getElementById('profileSummary');
+            const score = calculateProfileScore();
+            
+            summary.innerHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;">Profile Summary</h4>
+                    <p><strong>Name:</strong> ${profileData.name || 'Not provided'}</p>
+                    <p><strong>CNIC:</strong> ${profileData.cnic || 'Not provided'}</p>
+                    <p><strong>Degree:</strong> ${profileData.degree || 'Not provided'}</p>
+                    <p><strong>Field:</strong> ${profileData.fieldOfStudy || 'Not provided'}</p>
+                    <p><strong>Skills:</strong> ${profileData.skills?.length || 0} skills added</p>
+                    <p><strong>Experience:</strong> ${profileData.totalYears || 0} years</p>
+                    <p><strong>Profile Score:</strong> ${score}%</p>
+                </div>
+            `;
+        }
+
+        async function saveProfile() {
+            try {
+                await fetch(`${API_URL}/api/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+            } catch (error) {
+                console.error('Error saving profile:', error);
+            }
+        }
+
+        function startTest() {
+            saveProfile();
+            window.location.href = 'skill-test.html';
+        }
+
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            container.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Handle Enter key in skill input
+        document.getElementById('skillInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addSkill();
+            }
+        });
+
+        // Initialize
+        loadProfile();
+    </script>
+</body>
+</html>

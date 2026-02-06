@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .navbar-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .user-info span {
+            font-weight: 500;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-banner h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .stat-card .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-card .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Job List */
+        .job-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .job-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .job-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .job-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .job-card .company {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .job-card .details {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .job-card .description {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .job-card .tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .job-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .profile-section h3 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        /* Search and Filters */
+        .search-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-section input,
+        .search-section select {
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            min-width: 200px;
+        }
+
+        .search-section input:focus,
+        .search-section select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-radius: 5px 5px 0 0;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: #f0f0f0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+
+        .empty-state h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h3 {
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .toast.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand" onclick="showPage('dashboard')">Job Portal</a>
+        <div class="user-info" id="userInfo">
+            <span id="userName"></span>
+            <button class="btn btn-secondary btn-small" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Dashboard Page -->
+    <div class="container">
+        <div class="welcome-banner">
+            <div>
+                <h1 id="welcomeTitle">Welcome to Your Dashboard</h1>
+                <p id="welcomeMessage">Find your dream job today</p>
+            </div>
+            <div id="quickStats"></div>
+        </div>
+
+        <!-- Employee Dashboard -->
+        <div id="employeeDashboard">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('employee', 'jobs')">Browse Jobs</button>
+                <button class="tab" onclick="switchTab('employee', 'profile')">My Profile</button>
+                <button class="tab" onclick="switchTab('employee', 'applications')">My Applications</button>
+                <button class="tab" onclick="switchTab('employee', 'progress')">My Progress</button>
+            </div>
+
+            <!-- Browse Jobs Tab -->
+            <div id="employeeJobsTab" class="tab-content active">
+                <div class="search-section">
+                    <input type="text" id="jobSearch" placeholder="Search jobs..." oninput="searchJobs()">
+                    <select id="jobCategoryFilter" onchange="searchJobs()">
+                        <option value="">All Categories</option>
+                        <option value="IT">IT & Technology</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Finance">Finance</option>
+                        <option value="HR">Human Resources</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Design">Design</option>
+                    </select>
+                </div>
+                <div class="job-list" id="jobList"></div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="employeeProfileTab" class="tab-content">
+                <div class="profile-section">
+                    <h3>Personal Details</h3>
+                    <form id="profileForm" onsubmit="updateProfile(event)">
+                        <div class="form-group">
+                            <label for="profileCNIC">CNIC Number</label>
+                            <input type="text" id="profileCNIC" placeholder="e.g., 12345-1234567-1" maxlength="15">
+                        </div>
+                        <div class="form-group">
+                            <label for="profilePhone">Phone Number</label>
+                            <input type="tel" id="profilePhone" placeholder="Enter phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileAddress">Address</label>
+                            <input type="text" id="profileAddress" placeholder="Enter address">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileJobTitle">Desired Job Title</label>
+                            <input type="text" id="profileJobTitle" placeholder="e.g., Software Developer">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileSkills">Skills (comma separated)</label>
+                            <input type="text" id="profileSkills" placeholder="e.g., JavaScript, React, Node.js">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileExperience">Work Experience</label>
+                            <textarea id="profileExperience" placeholder="Describe your work experience..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileEducation">Education</label>
+                            <textarea id="profileEducation" placeholder="Describe your education..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileBio">Bio</label>
+                            <textarea id="profileBio" placeholder="Tell us about yourself..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">Save Profile</button>
+                    </form>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Upload CV</h3>
+                    <div class="file-upload" onclick="document.getElementById('cvInput').click()" style="border: 2px dashed #ddd; padding: 30px; text-align: center; border-radius: 10px; cursor: pointer;">
+                        <p>Click to upload your CV (PDF, DOC, DOCX)</p>
+                        <p style="font-size: 12px; color: #999;">Maximum file size: 5MB</p>
+                        <input type="file" id="cvInput" accept=".pdf,.doc,.docx" onchange="uploadCV(event)" style="display: none;">
+                    </div>
+                    <div id="cvStatus" style="margin-top: 15px;"></div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Skill Test Results</h3>
+                    <div id="testResultsSection">
+                        <div class="stats-grid" style="margin-bottom: 20px;">
+                            <div class="stat-card">
+                                <div class="stat-number" id="profileScore">0%</div>
+                                <div class="stat-label">Profile Score</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="testScore">N/A</div>
+                                <div class="stat-label">Test Score</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="testStatus">Not Taken</div>
+                                <div class="stat-label">Test Status</div>
+                            </div>
+                        </div>
+                        <div id="testAttemptsList"></div>
+                        <button class="btn btn-primary" onclick="window.location.href='skill-test.html'" style="margin-top: 15px;">Take/Retake Skill Test</button>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Work History</h3>
+                    <div id="workHistoryList">
+                        <p style="color: #666; margin-bottom: 15px;">Add your previous work experience to showcase your career progression.</p>
+                        <button class="btn btn-primary" onclick="addWorkHistory()" style="margin-bottom: 20px;">+ Add Work Experience</button>
+                        <div id="workHistoryItems"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applications Tab -->
+            <div id="employeeApplicationsTab" class="tab-content">
+                <div id="employeeApplicationsList"></div>
+            </div>
+
+            <!-- Progress Tab -->
+            <div id="employeeProgressTab" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalApplications">0</div>
+                        <div class="stat-label">Total Applications</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingApps">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="inProgressApps">0</div>
+                        <div class="stat-label">In Progress</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="acceptedApps">0</div>
+                        <div class="stat-label">Accepted</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Application Progress</h3>
+                    <div id="progressList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employer Dashboard -->
+        <div id="employerDashboard" style="display: none;">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('employer', 'myJobs')">My Jobs</button>
+                <button class="tab" onclick="switchTab('employer', 'postJob')">Post New Job</button>
+                <button class="tab" onclick="switchTab('employer', 'candidates')">Find Candidates</button>
+                <button class="tab" onclick="switchTab('employer', 'applications')">Applications</button>
+            </div>
+
+            <!-- My Jobs Tab -->
+            <div id="employerMyJobsTab" class="tab-content active">
+                <div class="job-list" id="employerJobList"></div>
+            </div>
+
+            <!-- Post Job Tab -->
+            <div id="employerPostJobTab" class="tab-content">
+                <div class="card">
+                    <h3>Post a New Job</h3>
+                    <form id="jobPostForm" onsubmit="postJob(event)">
+                        <div class="form-group">
+                            <label for="jobTitle">Job Title</label>
+                            <input type="text" id="jobTitle" required placeholder="e.g., Software Developer">
+                        </div>
+                        <div class="form-group">
+                            <label for="jobCategory">Category</label>
+                            <select id="jobCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="IT">IT & Technology</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Sales">Sales</option>
+                                <option value="Finance">Finance</option>
+                                <option value="HR">Human Resources</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Design">Design</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="jobDescription">Job Description</label>
+                            <textarea id="jobDescription" required placeholder="Describe the job role and responsibilities..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="jobRequirements">Requirements (comma separated)</label>
+                            <input type="text" id="jobRequirements" placeholder="e.g., 2+ years experience, Bachelor's degree">
+                        </div>
+                        <div class="form-group">
+                            <label for="jobLocation">Location</label>
+                            <input type="text" id="jobLocation" required placeholder="e.g., New York, NY">
+                        </div>
+                        <div class="form-group">
+                            <label for="jobSalary">Salary Range</label>
+                            <input type="text" id="jobSalary" placeholder="e.g., $50,000 - $70,000">
+                        </div>
+                        <div class="form-group">
+                            <label for="jobType">Job Type</label>
+                            <select id="jobType" required>
+                                <option value="full-time">Full Time</option>
+                                <option value="part-time">Part Time</option>
+                                <option value="contract">Contract</option>
+                                <option value="internship">Internship</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">Post Job</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Find Candidates Tab -->
+            <div id="employerCandidatesTab" class="tab-content">
+                <div class="search-section">
+                    <input type="text" id="candidateSearch" placeholder="Search by skills..." oninput="searchCandidates()">
+                </div>
+                <div id="candidatesList"></div>
+            </div>
+
+            <!-- Applications Tab -->
+            <div id="employerApplicationsTab" class="tab-content">
+                <div id="employerApplicationsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Detail Modal -->
+    <div class="modal" id="jobDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalJobTitle">Job Title</h3>
+                <button class="modal-close" onclick="closeModal('jobDetailModal')">&times;</button>
+            </div>
+            <div id="modalJobContent"></div>
+        </div>
+    </div>
+
+    <!-- Onboarding Wizard Modal -->
+    <div class="modal" id="onboardingModal" style="background: rgba(0,0,0,0.7);">
+        <div class="modal-content" style="max-width: 700px;">
+            <div id="onboardingContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '';
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let authToken = localStorage.getItem('authToken');
+
+        // Initialize
+        if (!currentUser || !authToken) {
+            window.location.href = 'login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (currentUser.role === 'employee') {
+                document.getElementById('employeeDashboard').style.display = 'block';
+                document.getElementById('employerDashboard').style.display = 'none';
+                document.getElementById('welcomeTitle').textContent = `Welcome, ${currentUser.name}!`;
+                document.getElementById('welcomeMessage').textContent = 'Find your dream job today';
+                loadJobs();
+                checkOnboardingStatus();
+            } else {
+                document.getElementById('employeeDashboard').style.display = 'none';
+                document.getElementById('employerDashboard').style.display = 'block';
+                document.getElementById('welcomeTitle').textContent = `Welcome, ${currentUser.name}!`;
+                document.getElementById('welcomeMessage').textContent = 'Manage your jobs and find candidates';
+            }
+            document.getElementById('userName').textContent = currentUser.name;
+        });
+
+        // Toast Notifications
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Tab Navigation
+        function switchTab(userType, tabName) {
+            document.querySelectorAll(`#${userType}Dashboard .tab`).forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            document.querySelectorAll(`#${userType}Dashboard .tab-content`).forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${userType}${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`).classList.add('active');
+
+            if (userType === 'employee') {
+                loadEmployeeTab(tabName);
+            } else {
+                loadEmployerTab(tabName);
+            }
+        }
+
+        function loadEmployeeTab(tabName) {
+            switch(tabName) {
+                case 'jobs': loadJobs(); break;
+                case 'profile': loadProfile(); break;
+                case 'applications': loadEmployeeApplications(); break;
+                case 'progress': loadProgress(); break;
+            }
+        }
+
+        function loadEmployerTab(tabName) {
+            switch(tabName) {
+                case 'myJobs': loadEmployerJobs(); break;
+                case 'postJob': break;
+                case 'candidates': loadCandidates(); break;
+                case 'applications': loadEmployerApplications(); break;
+            }
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        // Job Functions
+        async function loadJobs() {
+            try {
+                const response = await fetch(`${API_URL}/api/jobs?status=active`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const jobs = await response.json();
+                displayJobs(jobs, 'jobList');
+            } catch (error) {
+                console.error('Error loading jobs:', error);
+            }
+        }
+
+        async function searchJobs() {
+            const search = document.getElementById('jobSearch').value;
+            const category = document.getElementById('jobCategoryFilter').value;
+            let url = `${API_URL}/api/jobs?status=active`;
+            if (search) url += `&search=${encodeURIComponent(search)}`;
+            if (category) url += `&category=${encodeURIComponent(category)}`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const jobs = await response.json();
+                displayJobs(jobs, 'jobList');
+            } catch (error) {
+                console.error('Error searching jobs:', error);
+            }
+        }
+
+        function displayJobs(jobs, containerId) {
+            const container = document.getElementById(containerId);
+            if (jobs.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h4>No jobs found</h4><p>Try adjusting your search criteria</p></div>';
+                return;
+            }
+            container.innerHTML = jobs.map(job => `
+                <div class="job-card">
+                    <h4>${job.title}</h4>
+                    <div class="company">${job.employerName}</div>
+                    <div class="details">
+                        <span>📍 ${job.location}</span>
+                        <span>💰 ${job.salary || 'Negotiable'}</span>
+                        <span>📋 ${job.jobType}</span>
+                    </div>
+                    <div class="description">${job.description.substring(0, 200)}...</div>
+                    <div class="tags">
+                        ${job.category ? `<span class="tag">${job.category}</span>` : ''}
+                        ${job.requirements.slice(0, 3).map(r => `<span class="tag">${r}</span>`).join('')}
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn btn-primary btn-small" onclick="viewJobDetail('${job.id}')">View Details</button>
+                        ${currentUser.role === 'employee' ? 
+                            `<button class="btn btn-success btn-small" onclick="applyForJob('${job.id}')">Apply Now</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function viewJobDetail(jobId) {
+            try {
+                const response = await fetch(`${API_URL}/api/jobs/${jobId}`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const job = await response.json();
+                document.getElementById('modalJobTitle').textContent = job.title;
+                document.getElementById('modalJobContent').innerHTML = `
+                    <p><strong>Company:</strong> ${job.employerName}</p>
+                    <p><strong>Location:</strong> ${job.location}</p>
+                    <p><strong>Salary:</strong> ${job.salary || 'Negotiable'}</p>
+                    <p><strong>Job Type:</strong> ${job.jobType}</p>
+                    <p><strong>Description:</strong></p><p>${job.description}</p>
+                    <p><strong>Requirements:</strong></p><ul>${job.requirements.map(r => `<li>${r}</li>`).join('')}</ul>
+                    ${currentUser.role === 'employee' ? 
+                        `<button class="btn btn-success" style="margin-top: 20px;" onclick="applyForJob('${job.id}'); closeModal('jobDetailModal');">Apply Now</button>` : ''}
+                `;
+                openModal('jobDetailModal');
+            } catch (error) {
+                showToast('Error loading job details', 'error');
+            }
+        }
+
+        async function applyForJob(jobId) {
+            try {
+                const response = await fetch(`${API_URL}/api/jobs/${jobId}/apply`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    showToast('Application submitted successfully!');
+                    loadJobs();
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (error) {
+                showToast('Error applying for job: ' + error.message, 'error');
+            }
+        }
+
+        // Profile Functions
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const user = await response.json();
+                if (user.profile) {
+                    document.getElementById('profileCNIC').value = user.profile.cnic || '';
+                    document.getElementById('profilePhone').value = user.profile.phone || '';
+                    document.getElementById('profileAddress').value = user.profile.address || '';
+                    document.getElementById('profileJobTitle').value = user.profile.desiredJobTitle || '';
+                    document.getElementById('profileSkills').value = user.profile.skills ? user.profile.skills.join(', ') : '';
+                    document.getElementById('profileExperience').value = user.profile.experience || '';
+                    document.getElementById('profileEducation').value = user.profile.education || '';
+                    document.getElementById('profileBio').value = user.profile.bio || '';
+                    if (user.profile.cv) {
+                        document.getElementById('cvStatus').innerHTML = `<p style="color: #28a745;">✓ CV uploaded: <a href="${user.profile.cv}" target="_blank">View CV</a></p>`;
+                    }
+                    
+                    // Load work history
+                    loadWorkHistory();
+                    
+                    // Display test results
+                    if (user.profile.profileScore !== undefined) {
+                        document.getElementById('profileScore').textContent = user.profile.profileScore + '%';
+                    }
+                    if (user.profile.testScore !== undefined) {
+                        document.getElementById('testScore').textContent = user.profile.testScore + '%';
+                    }
+                    if (user.profile.testPassed !== undefined) {
+                        document.getElementById('testStatus').textContent = user.profile.testPassed ? 'Passed' : 'Failed';
+                        document.getElementById('testStatus').style.color = user.profile.testPassed ? '#28a745' : '#dc3545';
+                    }
+                    
+                    // Display test attempts
+                    const testAttempts = user.profile.testAttempts || [];
+                    const testAttemptsList = document.getElementById('testAttemptsList');
+                    if (testAttempts.length > 0) {
+                        testAttemptsList.innerHTML = testAttempts.map((attempt, index) => `
+                            <div class="attempt-item" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong>Attempt ${index + 1}</strong><br>
+                                        <span style="font-size: 12px; color: #666;">${new Date(attempt.date).toLocaleDateString()}</span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 18px; font-weight: bold; color: ${attempt.passed ? '#28a745' : '#dc3545'};">${attempt.score}%</div>
+                                        <div style="font-size: 12px; color: ${attempt.passed ? '#28a745' : '#dc3545'};">${attempt.passed ? '✓ Passed' : '✗ Failed'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        testAttemptsList.innerHTML = '<p style="color: #666;">No test attempts yet. Take the skill test to showcase your abilities!</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        async function updateProfile(event) {
+            event.preventDefault();
+            const skills = document.getElementById('profileSkills').value;
+            const profileData = {
+                cnic: document.getElementById('profileCNIC').value,
+                phone: document.getElementById('profilePhone').value,
+                address: document.getElementById('profileAddress').value,
+                desiredJobTitle: document.getElementById('profileJobTitle').value,
+                skills: skills ? skills.split(',').map(s => s.trim()) : [],
+                experience: document.getElementById('profileExperience').value,
+                education: document.getElementById('profileEducation').value,
+                bio: document.getElementById('profileBio').value
+            };
+            try {
+                const response = await fetch(`${API_URL}/api/profile`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(profileData)
+                });
+                const data = await response.json();
+                if (response.ok) showToast('Profile updated successfully!');
+            } catch (error) {
+                showToast('Error updating profile: ' + error.message, 'error');
+            }
+        }
+
+        async function uploadCV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('cv', file);
+            try {
+                const response = await fetch(`${API_URL}/api/profile/cv`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` },
+                    body: formData
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    showToast('CV uploaded successfully!');
+                    document.getElementById('cvStatus').innerHTML = `<p style="color: #28a745;">✓ CV uploaded: <a href="${data.cv}" target="_blank">View CV</a></p>`;
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (error) {
+                showToast('Error uploading CV: ' + error.message, 'error');
+            }
+        }
+
+        function addWorkHistory() {
+            const workHistoryItems = document.getElementById('workHistoryItems');
+            const itemId = Date.now();
+            const workItem = `
+                <div class="work-item" id="workItem_${itemId}" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" id="company_${itemId}" placeholder="Enter company name">
+                    </div>
+                    <div class="form-group">
+                        <label>Job Title</label>
+                        <input type="text" id="jobTitle_${itemId}" placeholder="Enter your job title">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" id="startDate_${itemId}">
+                        </div>
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" id="endDate_${itemId}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="description_${itemId}" placeholder="Describe your responsibilities and achievements..."></textarea>
+                    </div>
+                    <button class="btn btn-danger" onclick="removeWorkHistory(${itemId})" style="margin-top: 10px;">Remove</button>
+                </div>
+            `;
+            workHistoryItems.insertAdjacentHTML('beforeend', workItem);
+        }
+
+        function removeWorkHistory(itemId) {
+            const workItem = document.getElementById(`workItem_${itemId}`);
+            if (workItem) {
+                workItem.remove();
+            }
+        }
+
+        async function loadWorkHistory() {
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const user = await response.json();
+                
+                const workHistoryItems = document.getElementById('workHistoryItems');
+                const workHistory = user.profile?.workHistory || [];
+                
+                if (workHistory.length > 0) {
+                    workHistoryItems.innerHTML = workHistory.map((work, index) => `
+                        <div class="work-item" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <h4>${work.company}</h4>
+                                    <p style="color: #667eea; font-weight: 500;">${work.jobTitle}</p>
+                                    <p style="font-size: 12px; color: #666;">${work.startDate} - ${work.endDate || 'Present'}</p>
+                                    <p style="margin-top: 10px; color: #555;">${work.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    workHistoryItems.innerHTML = '<p style="color: #666;">No work history added yet.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading work history:', error);
+            }
+        }
+
+        async function saveWorkHistory() {
+            // This function can be called to save work history separately if needed
+            showToast('Work history is saved with your profile. You can add more by clicking "Add Work Experience".');
+        }
+
+        // Application Functions
+        async function loadEmployeeApplications() {
+            try {
+                const response = await fetch(`${API_URL}/api/applications`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const applications = await response.json();
+                displayEmployeeApplications(applications);
+            } catch (error) {
+                console.error('Error loading applications:', error);
+            }
+        }
+
+        function displayEmployeeApplications(applications) {
+            const container = document.getElementById('employeeApplicationsList');
+            if (applications.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h4>No applications yet</h4><p>Browse jobs and apply to get started</p></div>';
+                return;
+            }
+            container.innerHTML = applications.map(app => `
+                <div class="job-card">
+                    <h4>${app.job?.title || 'Unknown Job'}</h4>
+                    <div class="company">${app.job?.employerName || 'Unknown Company'}</div>
+                    <p style="color: #666; margin: 10px 0;">Applied on: ${new Date(app.appliedAt).toLocaleDateString()}</p>
+                    <span class="tag" style="background: ${app.status === 'pending' ? '#fff3cd' : app.status === 'accepted' ? '#d4edda' : '#f8d7da'}; color: ${app.status === 'pending' ? '#856404' : app.status === 'accepted' ? '#155724' : '#721c24'};">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span>
+                </div>
+            `).join('');
+        }
+
+        // Progress Functions
+        async function loadProgress() {
+            try {
+                const response = await fetch(`${API_URL}/api/progress`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const progress = await response.json();
+                document.getElementById('totalApplications').textContent = progress.totalApplications;
+                document.getElementById('pendingApps').textContent = progress.pendingApplications;
+                document.getElementById('inProgressApps').textContent = progress.inProgressApplications;
+                document.getElementById('acceptedApps').textContent = progress.acceptedApplications;
+            } catch (error) {
+                console.error('Error loading progress:', error);
+            }
+        }
+
+        // Employer Functions
+        async function postJob(event) {
+            event.preventDefault();
+            const jobData = {
+                title: document.getElementById('jobTitle').value,
+                category: document.getElementById('jobCategory').value,
+                description: document.getElementById('jobDescription').value,
+                requirements: document.getElementById('jobRequirements').value,
+                location: document.getElementById('jobLocation').value,
+                salary: document.getElementById('jobSalary').value,
+                jobType: document.getElementById('jobType').value
+            };
+            try {
+                const response = await fetch(`${API_URL}/api/jobs`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(jobData)
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    showToast('Job posted successfully!');
+                    document.getElementById('jobPostForm').reset();
+                    loadEmployerJobs();
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (error) {
+                showToast('Error posting job: ' + error.message, 'error');
+            }
+        }
+
+        async function loadEmployerJobs() {
+            try {
+                const response = await fetch(`${API_URL}/api/jobs`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const jobs = await response.json();
+                displayEmployerJobs(jobs);
+            } catch (error) {
+                console.error('Error loading jobs:', error);
+            }
+        }
+
+        function displayEmployerJobs(jobs) {
+            const container = document.getElementById('employerJobList');
+            if (jobs.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h4>No jobs posted yet</h4><p>Post your first job to start hiring</p></div>';
+                return;
+            }
+            container.innerHTML = jobs.map(job => `
+                <div class="job-card">
+                    <h4>${job.title}</h4>
+                    <div class="company">${job.employerName}</div>
+                    <div class="details">
+                        <span>📍 ${job.location}</span>
+                        <span>💰 ${job.salary || 'Negotiable'}</span>
+                        <span>${job.status === 'active' ? '✅ Active' : '❌ Inactive'}</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn btn-secondary btn-small" onclick="viewJobDetail('${job.id}')">View</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteJob('${job.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deleteJob(jobId) {
+            if (!confirm('Are you sure you want to delete this job?')) return;
+            try {
+                const response = await fetch(`${API_URL}/api/jobs/${jobId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (response.ok) {
+                    showToast('Job deleted successfully!');
+                    loadEmployerJobs();
+                }
+            } catch (error) {
+                showToast('Error deleting job: ' + error.message, 'error');
+            }
+        }
+
+        async function loadCandidates() {
+            try {
+                const response = await fetch(`${API_URL}/api/employees`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const employees = await response.json();
+                displayCandidates(employees);
+            } catch (error) {
+                console.error('Error loading candidates:', error);
+            }
+        }
+
+        function displayCandidates(employees) {
+            const container = document.getElementById('candidatesList');
+            if (employees.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h4>No candidates found</h4></div>';
+                return;
+            }
+            container.innerHTML = employees.map(emp => `
+                <div class="job-card">
+                    <h4>${emp.name}</h4>
+                    <div class="company">${emp.profile?.desiredJobTitle || 'Job Seeker'}</div>
+                    <div class="details">
+                        <span>📧 ${emp.email}</span>
+                        <span>📄 ${emp.applicationCount || 0} applications</span>
+                    </div>
+                    ${emp.profile?.skills && emp.profile.skills.length > 0 ? `<div class="tags">${emp.profile.skills.slice(0, 5).map(s => `<span class="tag">${s}</span>`).join('')}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function loadEmployerApplications() {
+            try {
+                const response = await fetch(`${API_URL}/api/applications`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const applications = await response.json();
+                const container = document.getElementById('employerApplicationsList');
+                if (applications.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><h4>No applications yet</h4></div>';
+                    return;
+                }
+                container.innerHTML = applications.map(app => `
+                    <div class="job-card">
+                        <h4>${app.job?.title || 'Unknown Job'}</h4>
+                        <div class="company">Candidate: ${app.employeeName}</div>
+                        <p>Email: ${app.employeeEmail}</p>
+                        <span class="tag" style="background: ${app.status === 'pending' ? '#fff3cd' : app.status === 'accepted' ? '#d4edda' : '#f8d7da'}; color: ${app.status === 'pending' ? '#856404' : app.status === 'accepted' ? '#155724' : '#721c24'};">${app.status}</span>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading applications:', error);
+            }
+        }
+
+        // Onboarding Wizard
+        async function checkOnboardingStatus() {
+            try {
+                const response = await fetch(`${API_URL}/api/onboarding/status`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const status = await response.json();
+                if (status.onboardingStep && status.onboardingStep !== 'complete') {
+                    showOnboardingWizard(status);
+                }
+            } catch (error) {
+                console.error('Error checking onboarding status:', error);
+            }
+        }
+
+        function showOnboardingWizard(status) {
+            openModal('onboardingModal');
+            const content = document.getElementById('onboardingContent');
+            const steps = {
+                'userType': renderUserTypeStep(status),
+                'qualifications': renderQualificationsStep(status),
+                'experience': renderExperienceStep(status),
+                'skills': renderSkillsStep(status),
+                'assessment': renderAssessmentIntroStep(status),
+                'complete': renderCompleteStep(status)
+            };
+            content.innerHTML = steps[status.onboardingStep] || steps['userType'];
+        }
+
+        function renderUserTypeStep() {
+            return `
+                <div style="text-align: center;">
+                    <h2 style="color: #667eea; margin-bottom: 10px;">Welcome!</h2>
+                    <p style="color: #666; margin-bottom: 30px;">Let's set up your profile</p>
+                    <h3 style="margin-bottom: 20px;">What describes you best?</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+                        <div onclick="selectUserType('employee')" style="padding: 30px 20px; border: 2px solid #ddd; border-radius: 10px; cursor: pointer;">
+                            <div style="font-size: 48px; margin-bottom: 15px;">💼</div>
+                            <h4>Employee</h4>
+                        </div>
+                        <div onclick="selectUserType('student')" style="padding: 30px 20px; border: 2px solid #ddd; border-radius: 10px; cursor: pointer;">
+                            <div style="font-size: 48px; margin-bottom: 15px;">📚</div>
+                            <h4>Student</h4>
+                        </div>
+                        <div onclick="selectUserType('freelancer')" style="padding: 30px 20px; border: 2px solid #ddd; border-radius: 10px; cursor: pointer;">
+                            <div style="font-size: 48px; margin-bottom: 15px;">🚀</div>
+                            <h4>Freelancer</h4>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function selectUserType(userType) {
+            try {
+                const response = await fetch(`${API_URL}/api/onboarding/user-type`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userType })
+                });
+                const status = await response.json();
+                document.getElementById('onboardingContent').innerHTML = renderQualificationsStep(status);
+            } catch (error) {
+                showToast('Error saving', 'error');
+            }
+        }
+
+        function renderQualificationsStep() {
+            return `
+                <div>
+                    <h3>Step 2 of 5: Your Qualifications</h3>
+                    <form onsubmit="saveQualifications(event)">
+                        <div class="form-group">
+                            <label>Highest Education</label>
+                            <select id="highestEducation" required>
+                                <option value="">Select...</option>
+                                <option value="high_school">High School</option>
+                                <option value="bachelors">Bachelor's Degree</option>
+                                <option value="masters">Master's Degree</option>
+                                <option value="phd">PhD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Field of Study</label>
+                            <select id="fieldOfStudy" required>
+                                <option value="">Select...</option>
+                                <option value="IT">IT</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Business">Business</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Institution</label>
+                            <input type="text" id="institution" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Graduation Year</label>
+                            <input type="number" id="graduationYear" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">Next: Experience →</button>
+                    </form>
+                </div>
+            `;
+        }
+
+        async function saveQualifications(event) {
+            event.preventDefault();
+            const data = {
+                highestEducation: document.getElementById('highestEducation').value,
+                fieldOfStudy: document.getElementById('fieldOfStudy').value,
+                institution: document.getElementById('institution').value,
+                graduationYear: parseInt(document.getElementById('graduationYear').value)
+            };
+            try {
+                const response = await fetch(`${API_URL}/api/onboarding/qualifications`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const status = await response.json();
+                document.getElementById('onboardingContent').innerHTML = renderExperienceStep(status);
+            } catch (error) {
+                showToast('Error saving', 'error');
+            }
+        }
+
+        function renderExperienceStep() {
+            return `
+                <div>
+                    <h3>Step 3 of 5: Your Experience</h3>
+                    <form onsubmit="saveExperience(event)">
+                        <div class="form-group">
+                            <label>Do you have work experience?</label>
+                            <select id="hasExperience" onchange="toggleExperienceFields()" required>
+                                <option value="">Select...</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No, I'm a fresher</option>
+                            </select>
+                        </div>
+                        <div id="experienceFields" style="display: none;">
+                            <div class="form-group">
+                                <label>Experience Level</label>
+                                <select id="experienceLevel">
+                                    <option value="entry">Entry Level</option>
+                                    <option value="mid">Mid Level</option>
+                                    <option value="senior">Senior Level</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Current Job Title</label>
+                                <input type="text" id="currentJobTitle">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">Next: Skills →</button>
+                    </form>
+                </div>
+            `;
+        }
+
+        function toggleExperienceFields() {
+            document.getElementById('experienceFields').style.display = document.getElementById('hasExperience').value === 'true' ? 'block' : 'none';
+        }
+
+        async function saveExperience(event) {
+            event.preventDefault();
+            const data = {
+                hasExperience: document.getElementById('hasExperience').value === 'true',
+                experienceLevel: document.getElementById('experienceLevel')?.value || '',
+                currentJobTitle: document.getElementById('currentJobTitle')?.value || ''
+            };
+            try {
+                const response = await fetch(`${API_URL}/api/onboarding/experience`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const status = await response.json();
+                document.getElementById('onboardingContent').innerHTML = renderSkillsStep(status);
+            } catch (error) {
+                showToast('Error saving', 'error');
+            }
+        }
+
+        function renderSkillsStep() {
+            return `
+                <div>
+                    <h3>Step 4 of 5: Your Skills</h3>
+                    <form onsubmit="saveSkills(event)">
+                        <div class="form-group">
+                            <label>Interested Field</label>
+                            <select id="interestedField" required>
+                                <option value="">Select...</option>
+                                <option value="IT">IT</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Design">Design</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Your Skills (comma separated)</label>
+                            <input type="text" id="skillsInput" placeholder="e.g., JavaScript, React" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Skill Level</label>
+                            <select id="skillLevel" required>
+                                <option value="">Select...</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                                <option value="expert">Expert</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: auto;">Next: Take Assessment →</button>
+                    </form>
+                </div>
+            `;
+        }
+
+        async function saveSkills(event) {
+            event.preventDefault();
+            const data = {
+                skills: document.getElementById('skillsInput').value.split(',').map(s => s.trim()).filter(s => s),
+                skillLevel: document.getElementById('skillLevel').value,
+                interestedFields: [document.getElementById('interestedField').value]
+            };
+            try {
+                await fetch(`${API_URL}/api/onboarding/skills`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                await loadAssessmentQuestions();
+            } catch (error) {
+                showToast('Error saving', 'error');
+            }
+        }
+
+        async function loadAssessmentQuestions() {
+            try {
+                const response = await fetch(`${API_URL}/api/assessment/questions`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await response.json();
+                renderAssessmentStep(data);
+            } catch (error) {
+                showToast('Error loading questions', 'error');
+            }
+        }
+
+        function renderAssessmentStep(data) {
+            const { field, questions, totalQuestions } = data;
+            let questionsHTML = questions.map((q, index) => `
+                <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+                    <p style="margin-bottom: 10px;"><strong>Q${index + 1}.</strong> ${q.question}</p>
+                    ${q.options.map((opt, optIndex) => `
+                        <label style="display: block; padding: 8px; margin-bottom: 5px; background: white; border-radius: 5px;">
+                            <input type="radio" name="question-${index}" value="${optIndex}"> ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+
+            document.getElementById('onboardingContent').innerHTML = `
+                <div>
+                    <h3>Step 5 of 5: Skills Assessment</h3>
+                    <p style="margin-bottom: 20px;">Field: ${field} | Questions: ${totalQuestions}</p>
+                    <form onsubmit="submitAssessment(event)">
+                        <input type="hidden" id="assessmentField" value="${field}">
+                        ${questionsHTML}
+                        <button type="submit" class="btn btn-primary" style="width: auto;">Submit Assessment</button>
+                    </form>
+                </div>
+            `;
+        }
+
+        async function submitAssessment(event) {
+            event.preventDefault();
+            const field = document.getElementById('assessmentField').value;
+            const answers = [];
+            const questionCards = document.querySelectorAll('[id^="question-"]');
+            questionCards.forEach((card, index) => {
+                const selectedOption = card.querySelector(`input[name="question-${index}"]:checked`);
+                answers.push(selectedOption ? parseInt(selectedOption.value) : 0);
+            });
+
+            try {
+                const response = await fetch(`${API_URL}/api/assessment/submit`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ answers, field })
+                });
+                const result = await response.json();
+                renderCompleteStep(result);
+            } catch (error) {
+                showToast('Error submitting', 'error');
+            }
+        }
+
+        function renderCompleteStep(result) {
+            const emoji = result.skillLevel === 'Expert' ? '🏆' : result.skillLevel === 'Advanced' ? '🌟' : '👍';
+            document.getElementById('onboardingContent').innerHTML = `
+                <div style="text-align: center; padding: 30px 0;">
+                    <div style="font-size: 60px; margin-bottom: 15px;">${emoji}</div>
+                    <h2 style="color: #667eea; margin-bottom: 15px;">Profile Complete!</h2>
+                    <p style="margin-bottom: 25px;">${result.skillLevel === 'Expert' ? 'Outstanding!' : 'Great job!'}</p>
+                    <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
+                        <p style="font-size: 32px; font-weight: bold; color: #667eea;">${result.score}%</p>
+                        <p>Score | ${result.skillLevel}</p>
+                    </div>
+                    <button class="btn btn-primary" style="width: auto;" onclick="closeOnboarding()">Go to Dashboard →</button>
+                </div>
+            `;
+        }
+
+        function closeOnboarding() {
+            document.getElementById('onboardingModal').classList.remove('active');
+            loadJobs();
+        }
+    </script>
+</body>
+</html>

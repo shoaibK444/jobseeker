@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Verify Email</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            margin: 20px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .auth-header .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .email-display {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 20px;
+            word-break: break-all;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .code-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .code-inputs input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .code-inputs input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .code-inputs input.error {
+            border-color: #dc3545;
+        }
+
+        .code-inputs input.success {
+            border-color: #28a745;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 2px solid #667eea;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert.visible {
+            display: block;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .resend-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .resend-link a {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .resend-link a:hover {
+            text-decoration: underline;
+        }
+
+        .timer {
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="icon">📧</div>
+            <h1>Verify Your Email</h1>
+            <p>Enter the 4-digit code sent to your email</p>
+        </div>
+
+        <div class="alert" id="alert"></div>
+
+        <div class="email-display" id="emailDisplay"></div>
+
+        <form id="verifyForm" onsubmit="handleVerify(event)">
+            <div class="form-group">
+                <label style="text-align: center;">Verification Code</label>
+                <div class="code-inputs">
+                    <input type="text" maxlength="1" class="code-digit" data-index="0" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, 0)">
+                    <input type="text" maxlength="1" class="code-digit" data-index="1" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, 1)">
+                    <input type="text" maxlength="1" class="code-digit" data-index="2" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, 2)">
+                    <input type="text" maxlength="1" class="code-digit" data-index="3" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, 3)">
+                </div>
+                <span class="error-message" id="codeError" style="text-align: center; display: block; margin-top: 10px;">Please enter the complete verification code</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submitBtn">Verify Email</button>
+        </form>
+
+        <div class="resend-link">
+            Didn't receive the code? <a onclick="resendCode()" id="resendBtn">Resend Code</a>
+            <span id="resendTimer" style="display: none;">Wait <span class="timer">60</span>s</span>
+        </div>
+
+        <div class="auth-footer">
+            <a href="login.html">Back to Login</a>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "";
+        let userEmail = '';
+
+        // Get email from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        userEmail = urlParams.get('email') || localStorage.getItem('verificationEmail');
+
+        if (!userEmail) {
+            showAlert('No email found. Please sign up first.', 'error');
+            setTimeout(() => {
+                window.location.href = 'signup.html';
+            }, 2000);
+        }
+
+        document.getElementById('emailDisplay').textContent = userEmail;
+
+        // Focus first input on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.code-digit[data-index="0"]').focus();
+            startResendTimer();
+        });
+
+        function handleCodeInput(input) {
+            const value = input.value;
+
+            // Only allow numbers
+            if (!/^\d*$/.test(value)) {
+                input.value = '';
+                return;
+            }
+
+            // Move to next input
+            if (value.length === 1) {
+                const index = parseInt(input.dataset.index);
+                if (index < 3) {
+                    document.querySelector(`.code-digit[data-index="${index + 1}"]`).focus();
+                }
+            }
+
+            // Check if all fields are filled
+            checkCodeComplete();
+        }
+
+        function handleKeyDown(event, index) {
+            if (event.key === 'Backspace' && event.target.value === '' && index > 0) {
+                document.querySelector(`.code-digit[data-index="${index - 1}"]`).focus();
+            }
+        }
+
+        function checkCodeComplete() {
+            const inputs = document.querySelectorAll('.code-digit');
+            const code = Array.from(inputs).map(input => input.value).join('');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (code.length === 4) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
+        // Disable submit button initially
+        document.getElementById('submitBtn').disabled = true;
+
+        async function handleVerify(event) {
+            event.preventDefault();
+
+            const inputs = document.querySelectorAll('.code-digit');
+            const code = Array.from(inputs).map(input => input.value).join('');
+
+            if (code.length !== 4) {
+                showAlert('Please enter the complete 4-digit code.', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Verifying...';
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/verify-email`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, code }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('Email verified successfully! Redirecting to login...', 'success');
+
+                    // Store token and user
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    localStorage.removeItem('verificationEmail');
+
+                    setTimeout(() => {
+                        window.location.href = 'login.html?verified=true';
+                    }, 1500);
+                } else {
+                    showAlert(data.error || 'Invalid verification code', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Verify Email';
+
+                    // Clear inputs and refocus
+                    inputs.forEach(input => {
+                        input.value = '';
+                        input.classList.add('error');
+                    });
+                    setTimeout(() => {
+                        inputs.forEach(input => input.classList.remove('error'));
+                    }, 2000);
+                    document.querySelector('.code-digit[data-index="0"]').focus();
+                }
+            } catch (error) {
+                showAlert('Error verifying email: ' + error.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Verify Email';
+            }
+        }
+
+        async function resendCode() {
+            const resendBtn = document.getElementById('resendBtn');
+            const timerSpan = document.getElementById('resendTimer');
+            const timerValue = timerSpan.querySelector('.timer');
+
+            resendBtn.style.display = 'none';
+            timerSpan.style.display = 'inline';
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/resend-verification`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('New verification code sent! Check your email.', 'success');
+                } else {
+                    showAlert(data.error || 'Error resending code', 'error');
+                }
+            } catch (error) {
+                showAlert('Error resending code: ' + error.message, 'error');
+            }
+
+            // Start countdown
+            let seconds = 60;
+            const interval = setInterval(() => {
+                seconds--;
+                timerValue.textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    resendBtn.style.display = 'inline';
+                    timerSpan.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function startResendTimer() {
+            const resendBtn = document.getElementById('resendBtn');
+            const timerSpan = document.getElementById('resendTimer');
+            const timerValue = timerSpan.querySelector('.timer');
+
+            resendBtn.style.display = 'none';
+            timerSpan.style.display = 'inline';
+
+            let seconds = 60;
+            const interval = setInterval(() => {
+                seconds--;
+                timerValue.textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    resendBtn.style.display = 'inline';
+                    timerSpan.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert visible alert-${type}`;
+        }
+    </script>
+</body>
+</html>
