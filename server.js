@@ -10,7 +10,7 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0'; // Listen on all interfaces
-const CLIENT_URL = process.env.CLIENT_URL || 'http://jobseeker.edu.pk';
+const CLIENT_URL = process.env.CLIENT_URL || 'https://jobseeker.up.railway.app';
 const JWT_SECRET = 'job-portal-secret-key-2024';
 const RESET_TOKEN_SECRET = 'reset-token-secret-key-2024';
 
