@@ -313,12 +313,37 @@
 
         <div class="form-group">
           <label for="signupRole">Account Type *</label>
-          <select id="signupRole" required>
+          <select id="signupRole" required onchange="handleRoleChange()">
             <option value="">Select account type</option>
             <option value="employee">Job Seeker (Employee)</option>
             <option value="employer">Employer</option>
+            <option value="management">Management</option>
           </select>
           <span class="error-message" id="roleError">Please select an account type</span>
+        </div>
+
+        <div class="form-group" id="designationGroup" style="display: none;">
+          <label for="designation">Select Designation *</label>
+          <select id="designation" required>
+            <option value="">Select designation</option>
+            <option value="CEO">CEO</option>
+            <option value="CTO">CTO</option>
+            <option value="CFO">CFO</option>
+            <option value="HR Manager">HR Manager</option>
+            <option value="Project Manager">Project Manager</option>
+            <option value="Team Lead">Team Lead</option>
+            <option value="Senior Manager">Senior Manager</option>
+            <option value="Director">Director</option>
+            <option value="Vice President">Vice President</option>
+            <option value="General Manager">General Manager</option>
+          </select>
+          <span class="error-message" id="designationError">Please select your designation</span>
+        </div>
+
+        <div class="form-group" id="managementCodeGroup" style="display: none;">
+          <label for="managementCode">Management Access Code *</label>
+          <input type="password" id="managementCode" placeholder="Enter management access code" />
+          <span class="error-message" id="codeError">Invalid access code</span>
         </div>
 
         <button type="submit" class="btn btn-primary" id="submitBtn">Create Account</button>
@@ -447,12 +472,32 @@
       });
 
       document.getElementById('signupRole').addEventListener('change', function() {
+        handleRoleChange();
+      });
+
+      function handleRoleChange() {
+        const role = document.getElementById('signupRole').value;
+        const designationGroup = document.getElementById('designationGroup');
+        const managementCodeGroup = document.getElementById('managementCodeGroup');
+        const passwordGroup = document.getElementById('signupPassword').parentElement;
+        const confirmPasswordGroup = document.getElementById('signupConfirmPassword').parentElement;
+        
+        if (role === 'management') {
+          designationGroup.style.display = 'block';
+          managementCodeGroup.style.display = 'block';
+          passwordGroup.style.display = 'block';
+          confirmPasswordGroup.style.display = 'block';
+        } else {
+          designationGroup.style.display = 'none';
+          managementCodeGroup.style.display = 'none';
+        }
+        
         if (this.value) {
           document.getElementById('signupRole').classList.add('success');
           document.getElementById('signupRole').classList.remove('error');
           document.getElementById('roleError').classList.remove('visible');
         }
-      });
+      }
 
       function validateForm() {
         let isValid = true;
@@ -488,6 +533,27 @@
           isValid = false;
         }
 
+        // Management validation
+        if (role === 'management') {
+          const designation = document.getElementById('designation').value;
+          const managementCode = document.getElementById('managementCode').value;
+          
+          if (!designation) {
+            document.getElementById('designation').parentElement.querySelector('.error-message').classList.add('visible');
+            isValid = false;
+          }
+          
+          // Management access code - you can change this code
+          if (managementCode !== 'MGMT2024') {
+            document.getElementById('managementCode').classList.add('error');
+            document.getElementById('codeError').classList.add('visible');
+            isValid = false;
+          } else {
+            document.getElementById('managementCode').classList.remove('error');
+            document.getElementById('codeError').classList.remove('visible');
+          }
+        }
+
         return isValid;
       }
 
@@ -502,6 +568,7 @@
         const email = document.getElementById("signupEmail").value;
         const password = document.getElementById("signupPassword").value;
         const role = document.getElementById("signupRole").value;
+        const designation = document.getElementById("designation").value;
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
@@ -511,7 +578,7 @@
           const response = await fetch(`${API_URL}/api/auth/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password, role }),
+            body: JSON.stringify({ name, email, password, role, designation }),
           });
 
           const data = await response.json();
@@ -521,8 +588,10 @@
             localStorage.setItem("currentUser", JSON.stringify(data.user));
             alert("Account created successfully! Welcome to Job Portal!");
             
-            // Redirect based on profile completion
-            if (data.user.profileComplete === false) {
+            // Redirect based on role and profile completion
+            if (data.user.role === 'management') {
+              window.location.href = "management-dashboard.html";
+            } else if (data.user.profileComplete === false) {
               window.location.href = "profile-complete.html";
             } else if (data.user.role === 'admin') {
               window.location.href = "admin-dashboard.html";

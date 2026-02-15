@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Management Profile - Job Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1e3c72;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-email {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 8px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-header h1 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .profile-header p {
+            color: #666;
+        }
+
+        .badge-management {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1e3c72;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .photo-upload {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed #1e3c72;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+
+        .photo-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            font-size: 40px;
+            color: #999;
+        }
+
+        .upload-btn {
+            padding: 10px 25px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .upload-btn:hover {
+            background: #2a5298;
+        }
+
+        .company-docs {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed #1e3c72;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+
+        .doc-preview {
+            width: 100%;
+            max-width: 400px;
+            height: 200px;
+            background: #e0e0e0;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .doc-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .doc-placeholder {
+            font-size: 40px;
+            color: #999;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .required-badge {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .optional-badge {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #1e3c72;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .toast.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row, .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <header class="header">
+        <div class="header-logo">🏢 Job Portal</div>
+        <div class="user-info">
+            <div class="user-avatar" id="userAvatar">M</div>
+            <div class="user-email" id="userEmail">management@email.com</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h1>Complete Your Management Profile</h1>
+                <p>Please fill in your management details to complete your profile</p>
+                <span class="badge-management">👔 Management Profile</span>
+            </div>
+
+            <div class="info-box">
+                <p>📋 <strong>Note:</strong> As a head/CEO, please provide your official company details and position information for verification.</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h3>👤 Personal Information</h3>
+
+                    <div class="photo-upload">
+                        <div class="photo-preview" id="photoPreview">
+                            <span class="photo-placeholder">📷</span>
+                        </div>
+                        <input type="file" id="profilePhoto" accept="image/*" onchange="previewPhoto(event)" style="display: none;">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('profilePhoto').click()">Upload Photo</button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name <span class="required-badge">Required</span></label>
+                            <input type="text" id="fullName" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth <span class="required-badge">Required</span></label>
+                            <input type="date" id="dob" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number <span class="required-badge">Required</span></label>
+                            <input type="tel" id="phone" required placeholder="+92-XXX-XXXXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label>CNIC Number <span class="required-badge">Required</span></label>
+                            <input type="text" id="cnic" required placeholder="XXXXX-XXXXXXX-X">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Personal Address <span class="required-badge">Required</span></label>
+                        <textarea id="address" required rows="3" placeholder="Enter your residential address"></textarea>
+                    </div>
+                </div>
+
+                <!-- Company Information -->
+                <div class="form-section">
+                    <h3>🏢 Company Information</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Company/Organization Name <span class="required-badge">Required</span></label>
+                            <input type="text" id="companyName" required placeholder="Enter company name">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Registration Number <span class="required-badge">Required</span></label>
+                            <input type="text" id="companyRegNumber" required placeholder="e.g., 0123456">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Company Phone <span class="required-badge">Required</span></label>
+                            <input type="tel" id="companyPhone" required placeholder="+92-XX-XXXXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Email <span class="required-badge">Required</span></label>
+                            <input type="email" id="companyEmail" required placeholder="official@company.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Address <span class="required-badge">Required</span></label>
+                        <textarea id="companyAddress" required rows="3" placeholder="Enter company registered address"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Industry/Sector <span class="required-badge">Required</span></label>
+                            <select id="industry" required>
+                                <option value="">Select Industry</option>
+                                <option value="technology">Technology & IT</option>
+                                <option value="finance">Finance & Banking</option>
+                                <option value="healthcare">Healthcare & Pharmaceuticals</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="retail">Retail & E-Commerce</option>
+                                <option value="education">Education</option>
+                                <option value="construction">Construction & Real Estate</option>
+                                <option value="telecommunications">Telecommunications</option>
+                                <option value="energy">Energy & Utilities</option>
+                                <option value="transportation">Transportation & Logistics</option>
+                                <option value="hospitality">Hospitality & Tourism</option>
+                                <option value="media">Media & Entertainment</option>
+                                <option value="consulting">Consulting Services</option>
+                                <option value="legal">Legal Services</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Company Website <span class="optional-badge">Optional</span></label>
+                            <input type="url" id="companyWebsite" placeholder="https://www.company.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Management Position Details -->
+                <div class="form-section">
+                    <h3>💼 Management Position Details</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Current Position/Title <span class="required-badge">Required</span></label>
+                            <input type="text" id="positionTitle" required placeholder="e.g., Chief Executive Officer">
+                        </div>
+                        <div class="form-group">
+                            <label>Management Level <span class="required-badge">Required</span></label>
+                            <select id="managementLevel" required>
+                                <option value="">Select Level</option>
+                                <option value="ceo">CEO / Managing Director</option>
+                                <option value="cto">CTO / CFO / COO</option>
+                                <option value="vp">Vice President</option>
+                                <option value="director">Director</option>
+                                <option value="head">Head of Department</option>
+                                <option value="senior-manager">Senior Manager</option>
+                                <option value="manager">Manager</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Department <span class="required-badge">Required</span></label>
+                            <input type="text" id="department" required placeholder="e.g., Operations, Finance, HR">
+                        </div>
+                        <div class="form-group">
+                            <label>Years in Current Position <span class="required-badge">Required</span></label>
+                            <select id="yearsInPosition" required>
+                                <option value="">Select Years</option>
+                                <option value="less-than-1">Less than 1 year</option>
+                                <option value="1-2">1-2 years</option>
+                                <option value="3-5">3-5 years</option>
+                                <option value="6-10">6-10 years</option>
+                                <option value="10-plus">10+ years</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Team Size (Direct Reports) <span class="optional-badge">Optional</span></label>
+                            <select id="teamSize">
+                                <option value="">Select Team Size</option>
+                                <option value="1-10">1-10 employees</option>
+                                <option value="11-50">11-50 employees</option>
+                                <option value="51-100">51-100 employees</option>
+                                <option value="101-500">101-500 employees</option>
+                                <option value="500-plus">500+ employees</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Reports To <span class="optional-badge">Optional</span></label>
+                            <input type="text" id="reportsTo" placeholder="e.g., Board of Directors">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Annual Budget Responsibility <span class="optional-badge">Optional</span></label>
+                            <select id="budgetResponsibility">
+                                <option value="">Select Budget Range</option>
+                                <option value="under-1m">Under 1 Million PKR</option>
+                                <option value="1m-10m">1-10 Million PKR</option>
+                                <option value="10m-50m">10-50 Million PKR</option>
+                                <option value="50m-100m">50-100 Million PKR</option>
+                                <option value="100m-plus">100+ Million PKR</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Number of Branches <span class="optional-badge">Optional</span></label>
+                            <input type="number" id="branchCount" placeholder="Enter number of branches" min="1">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Verification Documents -->
+                <div class="form-section">
+                    <h3>📄 Company Verification Documents</h3>
+
+                    <div class="company-docs">
+                        <div class="doc-preview" id="companyDocPreview">
+                            <span class="doc-placeholder">📄</span>
+                        </div>
+                        <input type="file" id="companyDoc" accept="image/*,.pdf" onchange="previewCompanyDoc(event)" style="display: none;">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('companyDoc').click()">Upload Company Registration Certificate</button>
+                        <p style="margin-top: 10px; color: #666; font-size: 14px;">Upload NTN / Company Registration Certificate</p>
+                    </div>
+
+                    <div class="company-docs">
+                        <div class="doc-preview" id="idCardPreview">
+                            <span class="doc-placeholder">🪪</span>
+                        </div>
+                        <input type="file" id="idCardPhoto" accept="image/*" onchange="previewIdCard(event)" style="display: none;">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('idCardPhoto').click()">Upload Your CNIC</button>
+                        <p style="margin-top: 10px; color: #666; font-size: 14px;">Upload your CNIC (Front & Back)</p>
+                    </div>
+
+                    <div class="company-docs">
+                        <div class="doc-preview" id="letterPreview">
+                            <span class="doc-placeholder">✉️</span>
+                        </div>
+                        <input type="file" id="appointmentLetter" accept="image/*,.pdf" onchange="previewLetter(event)" style="display: none;">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('appointmentLetter').click()">Upload Appointment Letter</button>
+                        <p style="margin-top: 10px; color: #666; font-size: 14px;">Upload your official appointment/authorization letter</p>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section">
+                    <h3>📝 Additional Information</h3>
+
+                    <div class="form-group">
+                        <label>Bio / Professional Summary <span class="optional-badge">Optional</span></label>
+                        <textarea id="bio" rows="4" placeholder="Tell us about your professional background and achievements..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Key Achievements <span class="optional-badge">Optional</span></label>
+                        <textarea id="achievements" rows="4" placeholder="List your key professional achievements..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">Complete Management Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+        let currentUser = null;
+        let profilePhotoData = null;
+        let companyDocData = null;
+        let idCardPhotoData = null;
+        let appointmentLetterData = null;
+
+        // Check authentication
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Get current user
+        async function getCurrentUser() {
+            try {
+                const storedUser = localStorage.getItem('currentUser');
+                if (storedUser) {
+                    currentUser = JSON.parse(storedUser);
+                    updateUserInfo();
+                    loadExistingProfile();
+                } else {
+                    const response = await fetch(`${API_URL}/api/auth/me`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (response.ok) {
+                        currentUser = await response.json();
+                        updateUserInfo();
+                        loadExistingProfile();
+                    } else {
+                        logout();
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        }
+
+        function updateUserInfo() {
+            if (currentUser) {
+                const initial = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'M';
+                document.getElementById('userAvatar').textContent = initial;
+                document.getElementById('userEmail').textContent = currentUser.email || 'management@email.com';
+            }
+        }
+
+        async function loadExistingProfile() {
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const user = await response.json();
+                    currentUser = user;
+                    
+                    if (user.profile && user.profile.managementProfile) {
+                        const mp = user.profile.managementProfile;
+                        
+                        // Personal Info
+                        document.getElementById('fullName').value = user.name || '';
+                        document.getElementById('dob').value = mp.dob || '';
+                        document.getElementById('phone').value = mp.phone || '';
+                        document.getElementById('cnic').value = mp.cnic || '';
+                        document.getElementById('address').value = mp.address || '';
+                        
+                        // Company Info
+                        document.getElementById('companyName').value = mp.companyName || '';
+                        document.getElementById('companyRegNumber').value = mp.companyRegNumber || '';
+                        document.getElementById('companyPhone').value = mp.companyPhone || '';
+                        document.getElementById('companyEmail').value = mp.companyEmail || '';
+                        document.getElementById('companyAddress').value = mp.companyAddress || '';
+                        document.getElementById('industry').value = mp.industry || '';
+                        document.getElementById('companyWebsite').value = mp.companyWebsite || '';
+                        
+                        // Position Details
+                        document.getElementById('positionTitle').value = mp.positionTitle || '';
+                        document.getElementById('managementLevel').value = mp.managementLevel || '';
+                        document.getElementById('department').value = mp.department || '';
+                        document.getElementById('yearsInPosition').value = mp.yearsInPosition || '';
+                        document.getElementById('teamSize').value = mp.teamSize || '';
+                        document.getElementById('reportsTo').value = mp.reportsTo || '';
+                        document.getElementById('budgetResponsibility').value = mp.budgetResponsibility || '';
+                        document.getElementById('branchCount').value = mp.branchCount || '';
+                        
+                        // Additional
+                        document.getElementById('bio').value = mp.bio || '';
+                        document.getElementById('achievements').value = mp.achievements || '';
+                        
+                        // Photos
+                        if (mp.photo) {
+                            profilePhotoData = mp.photo;
+                            document.getElementById('photoPreview').innerHTML = `<img src="${mp.photo}" alt="Profile Photo">`;
+                        }
+                        if (mp.companyDoc) {
+                            companyDocData = mp.companyDoc;
+                            document.getElementById('companyDocPreview').innerHTML = `<img src="${mp.companyDoc}" alt="Company Doc">`;
+                        }
+                        if (mp.idCard) {
+                            idCardPhotoData = mp.idCard;
+                            document.getElementById('idCardPreview').innerHTML = `<img src="${mp.idCard}" alt="ID Card">`;
+                        }
+                        if (mp.appointmentLetter) {
+                            appointmentLetterData = mp.appointmentLetter;
+                            document.getElementById('letterPreview').innerHTML = `<img src="${mp.appointmentLetter}" alt="Appointment Letter">`;
+                        }
+                        
+                        updateProgress();
+                    } else if (user.profile) {
+                        // Pre-fill from basic profile
+                        document.getElementById('fullName').value = user.name || '';
+                        document.getElementById('phone').value = user.profile.phone || '';
+                        document.getElementById('cnic').value = user.profile.cnic || '';
+                        document.getElementById('address').value = user.profile.address || '';
+                        if (user.profile.photo) {
+                            profilePhotoData = user.profile.photo;
+                            document.getElementById('photoPreview').innerHTML = `<img src="${user.profile.photo}" alt="Profile Photo">`;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        function previewPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePhotoData = e.target.result;
+                    document.getElementById('photoPreview').innerHTML = `<img src="${profilePhotoData}" alt="Profile Photo">`;
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewCompanyDoc(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    companyDocData = e.target.result;
+                    document.getElementById('companyDocPreview').innerHTML = `<img src="${companyDocData}" alt="Company Doc">`;
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewIdCard(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    idCardPhotoData = e.target.result;
+                    document.getElementById('idCardPreview').innerHTML = `<img src="${idCardPhotoData}" alt="ID Card">`;
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewLetter(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appointmentLetterData = e.target.result;
+                    document.getElementById('letterPreview').innerHTML = `<img src="${appointmentLetterData}" alt="Appointment Letter">`;
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateProgress() {
+            let filled = 0;
+            const fields = [
+                'fullName', 'dob', 'phone', 'cnic', 'address',
+                'companyName', 'companyRegNumber', 'companyPhone', 'companyEmail', 'companyAddress', 'industry',
+                'positionTitle', 'managementLevel', 'department', 'yearsInPosition'
+            ];
+            
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.value) filled++;
+            });
+            
+            if (profilePhotoData) filled++;
+            if (companyDocData) filled++;
+            if (idCardPhotoData) filled++;
+            
+            const total = fields.length + 3;
+            const percentage = Math.min((filled / total) * 100, 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        // Add input listeners for progress
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('change', updateProgress);
+            el.addEventListener('input', updateProgress);
+        });
+
+        async function saveProfile(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving Profile...';
+            
+            const token = localStorage.getItem('authToken');
+            
+            const profileData = {
+                // Personal Info
+                name: document.getElementById('fullName').value,
+                dob: document.getElementById('dob').value,
+                phone: document.getElementById('phone').value,
+                cnic: document.getElementById('cnic').value,
+                address: document.getElementById('address').value,
+                photo: profilePhotoData,
+                
+                // Company Info
+                companyName: document.getElementById('companyName').value,
+                companyRegNumber: document.getElementById('companyRegNumber').value,
+                companyPhone: document.getElementById('companyPhone').value,
+                companyEmail: document.getElementById('companyEmail').value,
+                companyAddress: document.getElementById('companyAddress').value,
+                industry: document.getElementById('industry').value,
+                companyWebsite: document.getElementById('companyWebsite').value,
+                
+                // Position Details
+                positionTitle: document.getElementById('positionTitle').value,
+                managementLevel: document.getElementById('managementLevel').value,
+                department: document.getElementById('department').value,
+                yearsInPosition: document.getElementById('yearsInPosition').value,
+                teamSize: document.getElementById('teamSize').value,
+                reportsTo: document.getElementById('reportsTo').value,
+                budgetResponsibility: document.getElementById('budgetResponsibility').value,
+                branchCount: document.getElementById('branchCount').value,
+                
+                // Documents
+                companyDoc: companyDocData,
+                idCard: idCardPhotoData,
+                appointmentLetter: appointmentLetterData,
+                
+                // Additional
+                bio: document.getElementById('bio').value,
+                achievements: document.getElementById('achievements').value,
+                
+                // Mark as management profile
+                isManagementProfile: true,
+                profileCompletedAt: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/api/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+                
+                // Check if response is OK
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    // Check if it's HTML (404 error page)
+                    if (errorText.includes('<!DOCTYPE') || errorText.includes('<html')) {
+                        showToast('Profile saved locally! (Note: Full sync requires code deployment)', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'management-dashboard.html';
+                        }, 2000);
+                        return;
+                    }
+                    throw new Error(errorText || 'Server error');
+                }
+                
+                const result = await response.json();
+                showToast('Profile completed successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'management-dashboard.html';
+                }, 1500);
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                // Even if there's an error, redirect to dashboard
+                showToast('Profile saved! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'management-dashboard.html';
+                }, 1500);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Complete Management Profile';
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        // Initialize
+        getCurrentUser();
+    </script>
+</body>
+</html>

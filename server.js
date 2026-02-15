@@ -374,7 +374,7 @@ const authenticateToken = (req, res, next) => {
 // Signup
 app.post('/api/auth/signup', async (req, res) => {
     try {
-        const { email, password, role, name } = req.body;
+        const { email, password, role, name, designation } = req.body;
         
         // Check if user exists
         if (db.users.find(u => u.email === email)) {
@@ -389,8 +389,9 @@ app.post('/api/auth/signup', async (req, res) => {
             id: uuidv4(),
             email,
             password: hashedPassword,
-            role: role || 'employee', // 'employee' or 'employer'
+            role: role || 'employee', // 'employee', 'employer', 'management'
             name,
+            designation: designation || null,
             createdAt: new Date().toISOString(),
             profile: null,
             isVerified: true,
@@ -406,7 +407,7 @@ app.post('/api/auth/signup', async (req, res) => {
         res.status(201).json({
             message: 'Account created successfully',
             token,
-            user: { id: user.id, email: user.email, role: user.role, name: user.name, profileComplete: false }
+            user: { id: user.id, email: user.email, role: user.role, name: user.name, designation: user.designation, profileComplete: false }
         });
     } catch (error) {
         res.status(500).json({ error: 'Error creating user: ' + error.message });
@@ -790,7 +791,7 @@ app.get('/api/admin/employees/:id', adminAuthenticateToken, (req, res) => {
 // Add new employee (admin only)
 app.post('/api/admin/employees', adminAuthenticateToken, async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, designation } = req.body;
         
         if (!name || !email || !password) {
             return res.status(400).json({ error: 'Name, email, and password are required' });
@@ -810,6 +811,7 @@ app.post('/api/admin/employees', adminAuthenticateToken, async (req, res) => {
             email,
             password: hashedPassword,
             role: role || 'employee',
+            designation: designation || null,
             name,
             createdAt: new Date().toISOString(),
             profile: null,
@@ -948,6 +950,102 @@ app.put('/api/profile', authenticateToken, (req, res) => {
         res.json({ message: 'Profile updated successfully', profile: db.users[userIndex].profile });
     } catch (error) {
         res.status(500).json({ error: 'Error updating profile: ' + error.message });
+    }
+});
+
+// Update management profile (for heads and CEOs)
+app.put('/api/profile/management', authenticateToken, (req, res) => {
+    try {
+        // Check if user is management role
+        if (req.user.role !== 'management' && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'Only management users can update management profile' });
+        }
+        
+        const userIndex = db.users.findIndex(u => u.id === req.user.id);
+        if (userIndex === -1) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        
+        const {
+            // Personal Info
+            name, dob, phone, cnic, address, photo,
+            // Company Info
+            companyName, companyRegNumber, companyPhone, companyEmail, companyAddress, industry, companyWebsite,
+            // Position Details
+            positionTitle, managementLevel, department, yearsInPosition, teamSize, reportsTo, budgetResponsibility, branchCount,
+            // Documents
+            companyDoc, idCard, appointmentLetter,
+            // Additional
+            bio, achievements
+        } = req.body;
+        
+        // Initialize profile if not exists
+        if (!db.users[userIndex].profile) {
+            db.users[userIndex].profile = {};
+        }
+        
+        // Merge with existing profile data
+        const existingProfile = db.users[userIndex].profile;
+        const existingManagementProfile = existingProfile.managementProfile || {};
+        
+        // Update user name if provided
+        if (name) {
+            db.users[userIndex].name = name;
+        }
+        
+        // Create/update management profile
+        db.users[userIndex].profile = {
+            ...existingProfile,
+            // Basic profile fields
+            phone: phone || existingProfile.phone,
+            cnic: cnic || existingProfile.cnic,
+            address: address || existingProfile.address,
+            photo: photo || existingProfile.photo,
+            bio: bio || existingProfile.bio,
+            // Management specific fields
+            managementProfile: {
+                ...existingManagementProfile,
+                // Personal
+                dob,
+                // Company
+                companyName,
+                companyRegNumber,
+                companyPhone,
+                companyEmail,
+                companyAddress,
+                industry,
+                companyWebsite,
+                // Position
+                positionTitle,
+                managementLevel,
+                department,
+                yearsInPosition,
+                teamSize,
+                reportsTo,
+                budgetResponsibility,
+                branchCount,
+                // Documents
+                companyDoc,
+                idCard,
+                appointmentLetter,
+                // Additional
+                bio: achievements ? `${bio || ''}\n\nKey Achievements:\n${achievements}` : bio,
+                achievements,
+                // Metadata
+                isManagementProfile: true,
+                profileCompletedAt: new Date().toISOString()
+            },
+            // Update main profile timestamp
+            updatedAt: new Date().toISOString()
+        };
+        
+        res.json({ 
+            message: 'Management profile updated successfully', 
+            profile: db.users[userIndex].profile,
+            managementProfile: db.users[userIndex].profile.managementProfile
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating management profile: ' + error.message });
     }
 });
 

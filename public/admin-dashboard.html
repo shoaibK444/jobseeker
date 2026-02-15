@@ -473,10 +473,30 @@
                 </div>
                 <div class="form-group">
                     <label for="employeeRole">Account Type *</label>
-                    <select id="employeeRole" required>
+                    <select id="employeeRole" required onchange="toggleDesignationField()">
                         <option value="">Select account type</option>
                         <option value="employee">Job Seeker (Employee)</option>
                         <option value="employer">Employer</option>
+                        <option value="management">Management</option>
+                    </select>
+                </div>
+                <div class="form-group" id="designationGroup" style="display: none;">
+                    <label for="employeeDesignation">Designation *</label>
+                    <select id="employeeDesignation">
+                        <option value="">Select designation</option>
+                        <option value="CEO">CEO</option>
+                        <option value="CTO">CTO</option>
+                        <option value="CFO">CFO</option>
+                        <option value="COO">COO</option>
+                        <option value="HR Manager">HR Manager</option>
+                        <option value="Finance Manager">Finance Manager</option>
+                        <option value="IT Manager">IT Manager</option>
+                        <option value="Marketing Manager">Marketing Manager</option>
+                        <option value="Operations Manager">Operations Manager</option>
+                        <option value="HOD">HOD (Head of Department)</option>
+                        <option value="Team Lead">Team Lead</option>
+                        <option value="Senior Manager">Senior Manager</option>
+                        <option value="Manager">Manager</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Employee</button>
@@ -720,6 +740,13 @@
             const email = document.getElementById('employeeEmail').value;
             const password = document.getElementById('employeePassword').value;
             const role = document.getElementById('employeeRole').value;
+            const designation = document.getElementById('employeeDesignation').value;
+
+            // Validation for management role
+            if (role === 'management' && !designation) {
+                showAlert('Please select a designation for management role', 'error');
+                return;
+            }
 
             try {
                 const response = await fetch(`${API_URL}/api/admin/employees`, {
@@ -728,7 +755,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ name, email, password, role })
+                    body: JSON.stringify({ name, email, password, role, designation })
                 });
 
                 const data = await response.json();
@@ -742,6 +769,16 @@
                 }
             } catch (error) {
                 showAlert('Error adding employee: ' + error.message, 'error');
+            }
+        }
+
+        function toggleDesignationField() {
+            const role = document.getElementById('employeeRole').value;
+            const designationGroup = document.getElementById('designationGroup');
+            if (role === 'management') {
+                designationGroup.style.display = 'block';
+            } else {
+                designationGroup.style.display = 'none';
             }
         }
 

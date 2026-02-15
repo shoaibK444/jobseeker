@@ -863,7 +863,7 @@
         }
 
         // Tab Navigation
-        function switchTab(userType, tabName) {
+        function switchTab(userType, tabName, event) {
             document.querySelectorAll(`#${userType}Dashboard .tab`).forEach(tab => {
                 tab.classList.remove('active');
             });
