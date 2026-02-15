@@ -405,8 +405,26 @@
                             <input type="text" id="fullName" required placeholder="Enter your full name">
                         </div>
                         <div class="form-group">
-                            <label>Date of Birth <span class="required-badge">Required</span></label>
-                            <input type="date" id="dob" required>
+                            <label>Designation <span class="required-badge">Required</span></label>
+                            <select id="designation" required>
+                                <option value="">Select Designation</option>
+                                <option value="CEO">Chief Executive Officer (CEO)</option>
+                                <option value="Managing Director">Managing Director</option>
+                                <option value="Chairman">Chairman</option>
+                                <option value="Vice Chairman">Vice Chairman</option>
+                                <option value="President">President</option>
+                                <option value="COO">Chief Operating Officer (COO)</option>
+                                <option value="CFO">Chief Financial Officer (CFO)</option>
+                                <option value="CTO">Chief Technology Officer (CTO)</option>
+                                <option value="CHRO">Chief HR Officer (CHRO)</option>
+                                <option value="Director">Director</option>
+                                <option value="Executive Director">Executive Director</option>
+                                <option value="General Manager">General Manager</option>
+                                <option value="Senior Manager">Senior Manager</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Head of Department">Head of Department</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
                     </div>
 
@@ -627,7 +645,7 @@
         function updateProgress() {
             let filled = 0;
             const fields = [
-                'fullName', 'dob', 'phone', 'cnic', 'address'
+                'fullName', 'designation', 'dob', 'phone', 'cnic', 'address'
             ];
             
             fields.forEach(id => {
@@ -660,6 +678,7 @@
             const profileData = {
                 // Personal Info
                 name: document.getElementById('fullName').value,
+                designation: document.getElementById('designation').value,
                 dob: document.getElementById('dob').value,
                 phone: document.getElementById('phone').value,
                 cnic: document.getElementById('cnic').value,
