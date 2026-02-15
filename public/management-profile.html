@@ -387,7 +387,7 @@
             </div>
 
             <form id="profileForm" onsubmit="saveProfile(event)">
-                <!-- Personal Information -->
+                <!-- Personal Information (Simplified) -->
                 <div class="form-section">
                     <h3>👤 Personal Information</h3>
 
@@ -424,177 +424,6 @@
                     <div class="form-group">
                         <label>Personal Address <span class="required-badge">Required</span></label>
                         <textarea id="address" required rows="3" placeholder="Enter your residential address"></textarea>
-                    </div>
-                </div>
-
-                <!-- Company Information -->
-                <div class="form-section">
-                    <h3>🏢 Company Information</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Company/Organization Name <span class="required-badge">Required</span></label>
-                            <input type="text" id="companyName" required placeholder="Enter company name">
-                        </div>
-                        <div class="form-group">
-                            <label>Company Registration Number <span class="required-badge">Required</span></label>
-                            <input type="text" id="companyRegNumber" required placeholder="e.g., 0123456">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Company Phone <span class="required-badge">Required</span></label>
-                            <input type="tel" id="companyPhone" required placeholder="+92-XX-XXXXXXX">
-                        </div>
-                        <div class="form-group">
-                            <label>Company Email <span class="required-badge">Required</span></label>
-                            <input type="email" id="companyEmail" required placeholder="official@company.com">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Company Address <span class="required-badge">Required</span></label>
-                        <textarea id="companyAddress" required rows="3" placeholder="Enter company registered address"></textarea>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Industry/Sector <span class="required-badge">Required</span></label>
-                            <select id="industry" required>
-                                <option value="">Select Industry</option>
-                                <option value="technology">Technology & IT</option>
-                                <option value="finance">Finance & Banking</option>
-                                <option value="healthcare">Healthcare & Pharmaceuticals</option>
-                                <option value="manufacturing">Manufacturing</option>
-                                <option value="retail">Retail & E-Commerce</option>
-                                <option value="education">Education</option>
-                                <option value="construction">Construction & Real Estate</option>
-                                <option value="telecommunications">Telecommunications</option>
-                                <option value="energy">Energy & Utilities</option>
-                                <option value="transportation">Transportation & Logistics</option>
-                                <option value="hospitality">Hospitality & Tourism</option>
-                                <option value="media">Media & Entertainment</option>
-                                <option value="consulting">Consulting Services</option>
-                                <option value="legal">Legal Services</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Company Website <span class="optional-badge">Optional</span></label>
-                            <input type="url" id="companyWebsite" placeholder="https://www.company.com">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Management Position Details -->
-                <div class="form-section">
-                    <h3>💼 Management Position Details</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Current Position/Title <span class="required-badge">Required</span></label>
-                            <input type="text" id="positionTitle" required placeholder="e.g., Chief Executive Officer">
-                        </div>
-                        <div class="form-group">
-                            <label>Management Level <span class="required-badge">Required</span></label>
-                            <select id="managementLevel" required>
-                                <option value="">Select Level</option>
-                                <option value="ceo">CEO / Managing Director</option>
-                                <option value="cto">CTO / CFO / COO</option>
-                                <option value="vp">Vice President</option>
-                                <option value="director">Director</option>
-                                <option value="head">Head of Department</option>
-                                <option value="senior-manager">Senior Manager</option>
-                                <option value="manager">Manager</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Department <span class="required-badge">Required</span></label>
-                            <input type="text" id="department" required placeholder="e.g., Operations, Finance, HR">
-                        </div>
-                        <div class="form-group">
-                            <label>Years in Current Position <span class="required-badge">Required</span></label>
-                            <select id="yearsInPosition" required>
-                                <option value="">Select Years</option>
-                                <option value="less-than-1">Less than 1 year</option>
-                                <option value="1-2">1-2 years</option>
-                                <option value="3-5">3-5 years</option>
-                                <option value="6-10">6-10 years</option>
-                                <option value="10-plus">10+ years</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Team Size (Direct Reports) <span class="optional-badge">Optional</span></label>
-                            <select id="teamSize">
-                                <option value="">Select Team Size</option>
-                                <option value="1-10">1-10 employees</option>
-                                <option value="11-50">11-50 employees</option>
-                                <option value="51-100">51-100 employees</option>
-                                <option value="101-500">101-500 employees</option>
-                                <option value="500-plus">500+ employees</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Reports To <span class="optional-badge">Optional</span></label>
-                            <input type="text" id="reportsTo" placeholder="e.g., Board of Directors">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Annual Budget Responsibility <span class="optional-badge">Optional</span></label>
-                            <select id="budgetResponsibility">
-                                <option value="">Select Budget Range</option>
-                                <option value="under-1m">Under 1 Million PKR</option>
-                                <option value="1m-10m">1-10 Million PKR</option>
-                                <option value="10m-50m">10-50 Million PKR</option>
-                                <option value="50m-100m">50-100 Million PKR</option>
-                                <option value="100m-plus">100+ Million PKR</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Number of Branches <span class="optional-badge">Optional</span></label>
-                            <input type="number" id="branchCount" placeholder="Enter number of branches" min="1">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Company Verification Documents -->
-                <div class="form-section">
-                    <h3>📄 Company Verification Documents</h3>
-
-                    <div class="company-docs">
-                        <div class="doc-preview" id="companyDocPreview">
-                            <span class="doc-placeholder">📄</span>
-                        </div>
-                        <input type="file" id="companyDoc" accept="image/*,.pdf" onchange="previewCompanyDoc(event)" style="display: none;">
-                        <button type="button" class="upload-btn" onclick="document.getElementById('companyDoc').click()">Upload Company Registration Certificate</button>
-                        <p style="margin-top: 10px; color: #666; font-size: 14px;">Upload NTN / Company Registration Certificate</p>
-                    </div>
-
-                    <div class="company-docs">
-                        <div class="doc-preview" id="idCardPreview">
-                            <span class="doc-placeholder">🪪</span>
-                        </div>
-                        <input type="file" id="idCardPhoto" accept="image/*" onchange="previewIdCard(event)" style="display: none;">
-                        <button type="button" class="upload-btn" onclick="document.getElementById('idCardPhoto').click()">Upload Your CNIC</button>
-                        <p style="margin-top: 10px; color: #666; font-size: 14px;">Upload your CNIC (Front & Back)</p>
-                    </div>
-
-                    <div class="company-docs">
-                        <div class="doc-preview" id="letterPreview">
-                            <span class="doc-placeholder">✉️</span>
-                        </div>
-                        <input type="file" id="appointmentLetter" accept="image/*,.pdf" onchange="previewLetter(event)" style="display: none;">
-                        <button type="button" class="upload-btn" onclick="document.getElementById('appointmentLetter').click()">Upload Appointment Letter</button>
-                        <p style="margin-top: 10px; color: #666; font-size: 14px;">Upload your official appointment/authorization letter</p>
                     </div>
                 </div>
 
@@ -798,9 +627,7 @@
         function updateProgress() {
             let filled = 0;
             const fields = [
-                'fullName', 'dob', 'phone', 'cnic', 'address',
-                'companyName', 'companyRegNumber', 'companyPhone', 'companyEmail', 'companyAddress', 'industry',
-                'positionTitle', 'managementLevel', 'department', 'yearsInPosition'
+                'fullName', 'dob', 'phone', 'cnic', 'address'
             ];
             
             fields.forEach(id => {
@@ -809,10 +636,8 @@
             });
             
             if (profilePhotoData) filled++;
-            if (companyDocData) filled++;
-            if (idCardPhotoData) filled++;
             
-            const total = fields.length + 3;
+            const total = fields.length + 1;
             const percentage = Math.min((filled / total) * 100, 100);
             document.getElementById('progressFill').style.width = percentage + '%';
         }
@@ -840,30 +665,6 @@
                 cnic: document.getElementById('cnic').value,
                 address: document.getElementById('address').value,
                 photo: profilePhotoData,
-                
-                // Company Info
-                companyName: document.getElementById('companyName').value,
-                companyRegNumber: document.getElementById('companyRegNumber').value,
-                companyPhone: document.getElementById('companyPhone').value,
-                companyEmail: document.getElementById('companyEmail').value,
-                companyAddress: document.getElementById('companyAddress').value,
-                industry: document.getElementById('industry').value,
-                companyWebsite: document.getElementById('companyWebsite').value,
-                
-                // Position Details
-                positionTitle: document.getElementById('positionTitle').value,
-                managementLevel: document.getElementById('managementLevel').value,
-                department: document.getElementById('department').value,
-                yearsInPosition: document.getElementById('yearsInPosition').value,
-                teamSize: document.getElementById('teamSize').value,
-                reportsTo: document.getElementById('reportsTo').value,
-                budgetResponsibility: document.getElementById('budgetResponsibility').value,
-                branchCount: document.getElementById('branchCount').value,
-                
-                // Documents
-                companyDoc: companyDocData,
-                idCard: idCardPhotoData,
-                appointmentLetter: appointmentLetterData,
                 
                 // Additional
                 bio: document.getElementById('bio').value,
