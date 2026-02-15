@@ -317,12 +317,33 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
-// In-memory database
-const db = {
-    users: [],
-    jobs: [],
-    applications: []
-};
+// File-based database for persistence
+const dbFilePath = path.join(__dirname, 'database.json');
+
+// Load database from file
+function loadDatabase() {
+    try {
+        if (fs.existsSync(dbFilePath)) {
+            const data = fs.readFileSync(dbFilePath, 'utf8');
+            return JSON.parse(data);
+        }
+    } catch (error) {
+        console.error('Error loading database:', error);
+    }
+    return { users: [], jobs: [], applications: [] };
+}
+
+// Save database to file
+function saveDatabase() {
+    try {
+        fs.writeFileSync(dbFilePath, JSON.stringify(db, null, 2));
+    } catch (error) {
+        console.error('Error saving database:', error);
+    }
+}
+
+// Initialize database
+let db = loadDatabase();
 
 // Create default admin user synchronously (non-async)
 const createDefaultAdmin = async () => {
@@ -400,6 +421,7 @@ app.post('/api/auth/signup', async (req, res) => {
         };
         
         db.users.push(user);
+        saveDatabase(); // Save to file for persistence
         
         // Generate token
         const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
@@ -947,6 +969,7 @@ app.put('/api/profile', authenticateToken, (req, res) => {
             updatedAt: new Date().toISOString()
         };
         
+        saveDatabase(); // Save to file for persistence
         res.json({ message: 'Profile updated successfully', profile: db.users[userIndex].profile });
     } catch (error) {
         res.status(500).json({ error: 'Error updating profile: ' + error.message });
@@ -1039,6 +1062,7 @@ app.put('/api/profile/management', authenticateToken, (req, res) => {
             updatedAt: new Date().toISOString()
         };
         
+        saveDatabase(); // Save to file for persistence
         res.json({ 
             message: 'Management profile updated successfully', 
             profile: db.users[userIndex].profile,
