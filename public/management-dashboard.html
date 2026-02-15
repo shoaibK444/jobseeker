@@ -674,10 +674,20 @@
                     localStorage.setItem('currentUser', JSON.stringify(fullUser));
                     
                     const initials = fullUser.name ? fullUser.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 'M';
+                    const designation = fullUser.designation || fullUser.profile?.designation || '';
                     
-                    // Avatar
+                    // Avatar - show designation if no photo
                     if (fullUser.profile?.photo) {
                         document.getElementById('profileAvatar').innerHTML = `<img src="${fullUser.profile.photo}" alt="Profile">`;
+                    } else if (designation) {
+                        // Show designation abbreviation
+                        const desigAbbr = designation === 'CEO' ? 'CEO' : 
+                                         designation === 'Managing Director' ? 'MD' :
+                                         designation === 'Chairman' ? 'CHA' :
+                                         designation === 'President' ? 'PRE' :
+                                         designation === 'Employee' ? 'EMP' :
+                                         designation.substring(0, 3).toUpperCase();
+                        document.getElementById('avatarInitials').textContent = desigAbbr;
                     } else {
                         document.getElementById('avatarInitials').textContent = initials;
                     }

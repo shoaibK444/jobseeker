@@ -392,6 +392,39 @@ const authenticateToken = (req, res, next) => {
 
 // ==================== AUTH ROUTES ====================
 
+// Get all taken designations (for management team)
+app.get('/api/designations/taken', authenticateToken, (req, res) => {
+    try {
+        const takenDesignations = db.users
+            .filter(u => u.designation && u.id !== req.user.id)
+            .map(u => ({
+                designation: u.designation,
+                userName: u.name,
+                userEmail: u.email
+            }));
+        
+        res.json({ takenDesignations });
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching designations: ' + error.message });
+    }
+});
+
+// Check if designation is available
+app.get('/api/designations/check/:designation', authenticateToken, (req, res) => {
+    try {
+        const designation = req.params.designation;
+        const existingUser = db.users.find(u => u.designation === designation && u.id !== req.user.id);
+        
+        if (existingUser) {
+            res.json({ available: false, message: `${designation} is already assigned to ${existingUser.name}` });
+        } else {
+            res.json({ available: true, message: `${designation} is available` });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error checking designation: ' + error.message });
+    }
+});
+
 // Signup
 app.post('/api/auth/signup', async (req, res) => {
     try {
