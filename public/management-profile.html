@@ -451,6 +451,45 @@
                     <h3>📝 Additional Information</h3>
 
                     <div class="form-group">
+                        <label>Degree / Education <span class="required-badge">Required</span></label>
+                        <select id="education" required>
+                            <option value="">Select Degree</option>
+                            <option value="high-school">High School</option>
+                            <option value="intermediate">Intermediate / A-Levels</option>
+                            <option value="bachelors">Bachelor's Degree</option>
+                            <option value="masters">Master's Degree</option>
+                            <option value="mphil">M.Phil</option>
+                            <option value="phd">PhD</option>
+                            <option value="professional">Professional Certification</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Skills (comma separated) <span class="required-badge">Required</span></label>
+                        <input type="text" id="skills" required placeholder="e.g., Leadership, Management, Strategic Planning, Finance">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Years of Experience <span class="required-badge">Required</span></label>
+                        <select id="experience" required>
+                            <option value="">Select Experience</option>
+                            <option value="fresher">Fresh Graduate</option>
+                            <option value="1-2">1-2 years</option>
+                            <option value="3-5">3-5 years</option>
+                            <option value="6-10">6-10 years</option>
+                            <option value="11-15">11-15 years</option>
+                            <option value="16-20">16-20 years</option>
+                            <option value="20-plus">20+ years</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Other Expertise <span class="optional-badge">Optional</span></label>
+                        <textarea id="expertise" rows="3" placeholder="e.g., Project Management, Digital Marketing, Data Analysis"></textarea>
+                    </div>
+
+                    <div class="form-group">
                         <label>Bio / Professional Summary <span class="optional-badge">Optional</span></label>
                         <textarea id="bio" rows="4" placeholder="Tell us about your professional background and achievements..."></textarea>
                     </div>
@@ -646,7 +685,8 @@
         function updateProgress() {
             let filled = 0;
             const fields = [
-                'fullName', 'designation', 'dob', 'phone', 'cnic', 'address'
+                'fullName', 'designation', 'dob', 'phone', 'cnic', 'address',
+                'education', 'skills', 'experience'
             ];
             
             fields.forEach(id => {
@@ -656,7 +696,7 @@
             
             if (profilePhotoData) filled++;
             
-            const total = fields.length + 1;
+            const total = fields.length + 2;
             const percentage = Math.min((filled / total) * 100, 100);
             document.getElementById('progressFill').style.width = percentage + '%';
         }
@@ -740,6 +780,12 @@
                 cnic: document.getElementById('cnic').value,
                 address: document.getElementById('address').value,
                 photo: profilePhotoData,
+                
+                // Education & Experience
+                education: document.getElementById('education').value,
+                skills: document.getElementById('skills').value,
+                experience: document.getElementById('experience').value,
+                expertise: document.getElementById('expertise').value,
                 
                 // Additional
                 bio: document.getElementById('bio').value,
